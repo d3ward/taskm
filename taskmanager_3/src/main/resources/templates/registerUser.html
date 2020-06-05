@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>TaskManager</title>
+</head>
+
+<body>
+<h1>Register new User</h1>
+<form id = "registerUserForm"
+      th:action="@{/users/register}"
+      method="POST">
+
+    <table>
+        <tr>
+            <td><label for="userNameInput">Username</label>
+            <td><input id=userNameInput type="text" th:field="${credentialsForm.userName}" placeholder="USERNAME" required/></td>
+            <td th:if="${#fields.hasErrors('credentialsForm.userName')}" th:errors="${credentialsForm.userName}" th:style="'color:red'"></td>
+        </tr>
+        <tr>
+            <td><label for="passwordInput">Password</label></td>
+            <td><input id="passwordInput" type="password" th:field="${credentialsForm.password}" placeholder="PASSWORD"/></td>
+            <td th:if="${#fields.hasErrors('credentialsForm.password')}" th:errors="${credentialsForm.password}" th:style="'color:red'"></td>
+        </tr>
+        <tr>
+            <td><label for="firstNameInput">First Name</label></td>
+            <td><input id="firstNameInput" type="text" th:field="${userForm.firstName}" placeholder="FIRST NAME"/></td>
+            <td th:if="${#fields.hasErrors('userForm.firstName')}" th:errors="${userForm.firstName}" th:style="'color:red'"></td>
+        </tr>
+        <tr>
+            <td><label for="lastNameInput">Last Name</label></td>
+            <td><input id="lastNameInput" type="text" th:field="${userForm.lastName}" placeholder="LAST NAME"/></td>
+            <td th:if="${#fields.hasErrors('userForm.lastName')}" th:errors="${userForm.lastName}" th:style="'color:red'"></td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit">Register</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
