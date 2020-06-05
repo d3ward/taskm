@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>it.uniroma3.siw</groupId>
-	<artifactId>taskmanager</artifactId>
+	<artifactId>taskm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>taskmanager</name>
+	<name>taskm</name>
 	<description>SIW project with Spring Boot</description>
 
 	<properties>
