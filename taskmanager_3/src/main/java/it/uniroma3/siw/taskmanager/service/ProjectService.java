@@ -1,15 +1,14 @@
 package it.uniroma3.siw.taskmanager.service;
 
-import it.uniroma3.siw.taskmanager.model.Project;
-import it.uniroma3.siw.taskmanager.model.User;
-import it.uniroma3.siw.taskmanager.repository.ProjectRepository;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import it.uniroma3.siw.taskmanager.model.Project;
+import it.uniroma3.siw.taskmanager.model.User;
+import it.uniroma3.siw.taskmanager.repository.ProjectRepository;
 
 /**
  * The ProjectService handles logic for Projects.
