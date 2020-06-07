@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="https://www.thymeleaf.org">
-<head>
-    <title>TaskManager</title>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org">
+<head
+	th:replace="fragments/base.html :: headerfiles(title='Register Completed')">
 </head>
 <body>
-<h1>Congratulations for registering!</h1>
-<h2>Back to <a th:href="@{/index}">Welcome Page</a></h2>
+
+	<div class="container">
+		<h1>Congratulations for registering!</h1>
+		<h2>
+			Back to <a class="btn btn-primary" th:href="@{/index}">Welcome Page</a>
+		</h2>
+	</div>
+
 
 </body>
 </html>

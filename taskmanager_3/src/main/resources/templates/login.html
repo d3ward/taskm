@@ -2,8 +2,7 @@
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org">
-<head>
-    <title>TaskManager test</title>
+<head th:replace="fragments/base.html :: headerfiles(title='Login Page')">
 </head>
 <body>
 <form th:action="@{/login}" method="post">

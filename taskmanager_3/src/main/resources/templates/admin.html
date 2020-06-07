@@ -2,9 +2,7 @@
 <html lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>TaskManager</title>
+<head th:replace="fragments/base.html :: headerfiles(title='Admin')">
 </head>
 <body>
 <h1 th:text="'Welcome, Master ' + ${user.firstName} + '!'"></h1>
