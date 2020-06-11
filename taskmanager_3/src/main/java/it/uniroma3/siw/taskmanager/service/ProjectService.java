@@ -1,5 +1,8 @@
 package it.uniroma3.siw.taskmanager.service;
 
+import java.util.ArrayList;
+
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +51,13 @@ public class ProjectService {
     @Transactional
     public void deleteProject(Project project) {
         this.projectRepository.delete(project);
+    }
+    @Transactional
+    public List<Project> retrieveProjectsOwnedBy(User user) {
+    	Iterable<Project> i = this.projectRepository.findByOwner(user);
+    	ArrayList<Project> lista = new ArrayList<>();
+    	for(Project u:i) lista.add(u);
+    	return lista;
     }
 
     /**

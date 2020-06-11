@@ -1,4 +1,5 @@
 package it.uniroma3.siw.taskmanager.service;
+import it.uniroma3.siw.taskmanager.model.Project;
 import it.uniroma3.siw.taskmanager.model.User;
 import it.uniroma3.siw.taskmanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,4 +55,9 @@ public class UserService {
             result.add(user);
         return result;
     }
+
+	public List<User> getMembers(Project project) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

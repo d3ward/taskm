@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org">
+
+<head
+	th:replace="fragments/base.html :: headerfiles(title='TaskM - Project Overview ')">
+</head>
+
+<body>
+	<div class="container text-center mt-4">
+
+		<h1 th:text="${project.name}"></h1>
+		<h4 th:text="${project.description}" class="text-secondary"></h4>
+
+		<div th:if="${members.size()>0}">
+			<h3>Shared with:</h3>
+			<ul>
+				<li th:each="member : ${members}">
+					<div th:text="${member.firstName} + ' ' + ${member.lastName}"></div>
+				</li>
+			</ul>
+
+		</div>
+
+		<h3>Tasks</h3>
+		<ul>
+			<li th:each="task :: ${project.tasks}">
+				<div th:text="${task.name}"></div>
+				<div th:text="${task.descriotion}" class="text-secondary"></div>
+		</ul>
+
+	</div>
+
+</body>
+</html>

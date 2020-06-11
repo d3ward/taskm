@@ -4,7 +4,6 @@ import it.uniroma3.siw.taskmanager.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This interface is a CrudRepository for repository operations on Users.

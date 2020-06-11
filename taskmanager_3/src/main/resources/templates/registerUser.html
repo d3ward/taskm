@@ -8,7 +8,7 @@
 	<div class="container mt-4">
 		<div class="row justify-content-center">
 			<form id="registerUserForm" th:action="@{/users/register}"
-				method="POST" class="shadow p-3 m-2 mx-auto rounded ">
+				method="POST" class="shadow p-3 m-2 mx-auto rounded " autocomplete="off">
 				<h1>Register new User</h1>
 				<div class="form-group ">
 					<label for="userNameInput">Username</label> <input
@@ -52,6 +52,5 @@
 		</div>
 	</div>
 	
-	<footer th:replace
 </body>
 </html>
