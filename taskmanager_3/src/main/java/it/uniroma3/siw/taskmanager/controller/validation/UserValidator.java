@@ -25,12 +25,12 @@ public class UserValidator implements Validator {
         String firstName = user.getFirstName().trim();
         String lastName = user.getLastName().trim();
 
-        if (firstName.isBlank())
+        if (firstName.trim().isEmpty())
             errors.rejectValue("firstName", "required");
         else if (firstName.length() < MIN_NAME_LENGTH || firstName.length() > MAX_NAME_LENGTH)
             errors.rejectValue("firstName", "size");
 
-        if (lastName.isBlank())
+        if (lastName.trim().isEmpty())
             errors.rejectValue("lastName", "required");
         else if (lastName.length() < MIN_NAME_LENGTH || lastName.length() > MAX_NAME_LENGTH)
             errors.rejectValue("lastName", "size");

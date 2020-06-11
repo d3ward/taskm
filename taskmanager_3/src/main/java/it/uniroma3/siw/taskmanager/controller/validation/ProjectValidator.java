@@ -26,12 +26,12 @@ public class ProjectValidator implements Validator {
 		String description = p.getDescription().trim();
 		//User owner = p.getOwner();
 
-		if (name.isBlank())
+		if (name.trim().isEmpty())
 			errors.rejectValue("firstName", "required");
 		else if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH)
 			errors.rejectValue("firstName", "size");
 
-		if (description.isBlank())
+		if (description.trim().isEmpty())
 			errors.rejectValue("lastName", "required");
 		else if (description.length() < MIN_NAME_LENGTH || description.length() > MAX_NAME_LENGTH)
 			errors.rejectValue("lastName", "size");
