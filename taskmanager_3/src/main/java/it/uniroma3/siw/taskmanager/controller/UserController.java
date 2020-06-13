@@ -75,5 +75,7 @@ public class UserController {
         model.addAttribute("user", loggedUser);
         return "admin";
     }
+    
+    
 
 }

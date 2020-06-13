@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	   xmlns:th="https://www.thymeleaf.org">
+	   
+<head th:replace="fragments/base.html :: headerfiles(title='Update Your Profile')">
+<body>
+	<div class="container mt-4">
+		<form id="" th:action="@{users/me}" method="POST" class="shadow p-3 m-2 mx-auto rounded" autocomplete="off">
+			<div class="form-group">
+				<label for="userNameInput">Insert Your New Username</label>
+				<input class="form-control" id="userNameInput" type="text"
+				th:field="${credentialsForm.userName}" placeholder="USERNAME" >
+			</div>
+
+
+
+</form>
+
+
+
+</div>
+
+</body>
+
+
+
+</html>
