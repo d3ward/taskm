@@ -33,12 +33,12 @@ public class UserController {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
-    CredentialsValidator credentialsValidator;
-	
+	CredentialsValidator credentialsValidator;
+
 	@Autowired
-    CredentialsService credentialsService;
+	CredentialsService credentialsService;
 
 	@Autowired
 	SessionData sessionData;
@@ -81,24 +81,25 @@ public class UserController {
 	public String meUpdate(@Valid @ModelAttribute("userForm") User user, BindingResult userBindingResult,
 			@Valid @ModelAttribute("credentialsForm") Credentials credentials, BindingResult credentialsBindingResult,
 			Model model) {
+		// String currentPassword = (sessionData.getLoggedCredentials()).getPassword();
+		String userName = credentials.getUserName();
 
-		String userName=credentials.getUserName();
-		//String currentPassword = (sessionData.getLoggedCredentials()).getPassword();
-		credentials.setUserName("update="+userName);
+		credentials.setUserName("update=" + userName);
 		this.userValidator.validate(user, userBindingResult);
+		userName.replaceAll("update=", "");
 		this.credentialsValidator.validate(credentials, credentialsBindingResult);
 		if (!userBindingResult.hasErrors() && !credentialsBindingResult.hasErrors()) {
 
-			//Nome e cognome 
+			// Nome e cognome
 			User currentUser = sessionData.getLoggedUser();
 			currentUser.setFirstName(user.getFirstName());
 			currentUser.setLastName(user.getLastName());
-			
-			//Password e username
+
+			// Password e username
 			Credentials currentCredential = sessionData.getLoggedCredentials();
 			currentCredential.setPassword(credentials.getPassword());
 			currentCredential.setUserName(userName);
-			
+
 			credentialsService.saveCredentials(currentCredential);
 			User loggedUser = sessionData.getLoggedUser();
 			model.addAttribute("user", loggedUser);
