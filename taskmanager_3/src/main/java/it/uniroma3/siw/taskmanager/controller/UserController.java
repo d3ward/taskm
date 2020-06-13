@@ -82,8 +82,9 @@ public class UserController {
 			@Valid @ModelAttribute("credentialsForm") Credentials credentials, BindingResult credentialsBindingResult,
 			Model model) {
 
+		String userName=credentials.getUserName();
 		//String currentPassword = (sessionData.getLoggedCredentials()).getPassword();
-
+		credentials.setUserName("update="+userName);
 		this.userValidator.validate(user, userBindingResult);
 		this.credentialsValidator.validate(credentials, credentialsBindingResult);
 		if (!userBindingResult.hasErrors() && !credentialsBindingResult.hasErrors()) {
@@ -93,13 +94,15 @@ public class UserController {
 			currentUser.setFirstName(user.getFirstName());
 			currentUser.setLastName(user.getLastName());
 			
-			//PAssword e username
+			//Password e username
 			Credentials currentCredential = sessionData.getLoggedCredentials();
 			currentCredential.setPassword(credentials.getPassword());
-			currentCredential.setUserName(credentials.getUserName());
+			currentCredential.setUserName(userName);
 			
 			credentialsService.saveCredentials(currentCredential);
-			return "registrationSuccessful";
+			User loggedUser = sessionData.getLoggedUser();
+			model.addAttribute("user", loggedUser);
+			return "home";
 		}
 
 		return "updateProfile";
@@ -107,7 +110,7 @@ public class UserController {
 
 	/** **/
 
-	@RequestMapping(value = { "/updateProfile" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/users/me/update" }, method = RequestMethod.GET)
 	public String updateProfile(Model model) {
 		model.addAttribute("userForm", sessionData.getLoggedUser());
 		model.addAttribute("credentialsForm", sessionData.getLoggedCredentials());
