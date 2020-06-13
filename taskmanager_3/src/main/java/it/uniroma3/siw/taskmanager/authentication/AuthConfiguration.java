@@ -9,6 +9,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import javax.sql.DataSource;
 
 import static it.uniroma3.siw.taskmanager.model.Credentials.ADMIN_ROLE;
@@ -40,11 +42,9 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
                 .antMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
                 .anyRequest().authenticated()
-                .and().formLogin()
+                .and().formLogin().loginPage("/login")
                 .defaultSuccessUrl("/home")
-                .and().logout()
-                .logoutUrl("/logout")              
-                .logoutSuccessUrl("/index")
+                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true).permitAll();
                     

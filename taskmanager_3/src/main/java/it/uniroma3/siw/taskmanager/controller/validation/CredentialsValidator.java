@@ -3,6 +3,9 @@ package it.uniroma3.siw.taskmanager.controller.validation;
 import it.uniroma3.siw.taskmanager.model.Credentials;
 import it.uniroma3.siw.taskmanager.model.User;
 import it.uniroma3.siw.taskmanager.service.CredentialsService;
+
+import java.io.Console;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -25,14 +28,19 @@ public class CredentialsValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Credentials credentials = (Credentials) o;
+        Long id= credentials.getId();
+   
+        
         String userName = credentials.getUserName().trim();
         String password = credentials.getPassword().trim();
+        
+        Credentials trovaCredent = this.credentialsService.getCredentials(userName);
 
         if (userName.trim().isEmpty())
             errors.rejectValue("userName", "required");
         else if (userName.length() < MIN_USERNAME_LENGTH || userName.length() > MAX_USERNAME_LENGTH)
             errors.rejectValue("userName", "size");
-        else if (this.credentialsService.getCredentials(userName) != null)
+        else if(trovaCredent != null )
             errors.rejectValue("userName", "duplicate");
 
         if (password.trim().isEmpty())

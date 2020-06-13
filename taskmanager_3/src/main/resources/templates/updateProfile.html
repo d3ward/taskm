@@ -1,24 +1,61 @@
 <!DOCTYPE html>
-<html  lang="en" xmlns="http://www.w3.org/1999/xhtml"
-	   xmlns:th="https://www.thymeleaf.org">
-	   
-<head th:replace="fragments/base.html :: headerfiles(title='Update Your Profile')">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org">
+
+<head
+	th:replace="fragments/base.html :: headerfiles(title='Update Your Profile')"></head>
 <body>
 	<div class="container mt-4">
-		<form id="" th:action="@{users/me}" method="POST" class="shadow p-3 m-2 mx-auto rounded" autocomplete="off">
+		<form id="" th:action="@{users/me/update}" method="POST"
+			class="shadow p-3 m-2 mx-auto rounded" autocomplete="off">
 			<div class="form-group">
-				<label for="userNameInput">Insert Your New Username</label>
-				<input class="form-control" id="userNameInput" type="text"
-				th:field="${credentialsForm.userName}" placeholder="USERNAME" >
+				<div class="form-group ">
+					<label for="userNameInput">Username</label> <input
+						class="form-control" id=userNameInput type="text"
+						th:field="${credentialsForm.userName}" placeholder="USERNAME" />
+					<small class="form-text text-muted"
+						th:if="${#fields.hasErrors('credentialsForm.userName')}"
+						th:errors="${credentialsForm.userName}" th:style="'color:red'"></small>
+				</div>
+				<div class="form-group ">
+					<label for="passwordInput">Password</label> <input
+						class="form-control" id="passwordInput" type="password"
+						th:field="${credentialsForm.password}" placeholder="PASSWORD" />
+					<small class="form-text text-muted"
+						th:if="${#fields.hasErrors('credentialsForm.password')}"
+						th:errors="${credentialsForm.password}" th:style="'color:red'"></small>
+				</div>
+
+				<div class="form-group ">
+					<label for="firstNameInput">First Name</label> <input
+						class="form-control" id="firstNameInput" type="text"
+						th:field="${userForm.firstName}" placeholder="FIRST NAME" /> <small
+						class="form-text text-muted"
+						th:if="${#fields.hasErrors('userForm.firstName')}"
+						th:errors="${userForm.firstName}" th:style="'color:red'">
+					</small>
+				</div>
+
+				<div class="form-group ">
+					<label for="lastNameInput">Last Name</label> <input
+						class="form-control" id="lastNameInput" type="text"
+						th:field="${userForm.lastName}" placeholder="LAST NAME" /> <small
+						class="form-text text-muted"
+						th:if="${#fields.hasErrors('userForm.lastName')}"
+						th:errors="${userForm.lastName}" th:style="'color:red'"> </small>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary"> Aggiorna profio</button>
+				</div>
 			</div>
 
 
 
-</form>
+		</form>
 
 
 
-</div>
+	</div>
 
 </body>
 
