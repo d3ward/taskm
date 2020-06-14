@@ -1,6 +1,5 @@
 package it.uniroma3.siw.taskmanager.controller;
 
-import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -39,21 +38,20 @@ public class ProjectController {
 	@Autowired
 	CredentialsService credentialsService;
 
+	
 	@RequestMapping(value = { "/projects" }, method = RequestMethod.GET)
-	public String myOwnedProjects(Model model) {
+	public String myProjects(Model model) {
 		User loggedUser = sessionData.getLoggedUser();
+		
 		List<Project> projectsList = projectService.retrieveProjectsOwnedBy(loggedUser);
 		List<Project> memberOfProjects = projectService.retrieveProjectByMembers(loggedUser);
-		model.addAttribute("memberOfProjects",memberOfProjects);
+		
 		
 		model.addAttribute("loggedUser", loggedUser);
 		model.addAttribute("projectsList", projectsList);
-		
-		
-		
+		model.addAttribute("memberOfProjects",memberOfProjects);
 		
 		return "projects";
-
 	}
 
 	@RequestMapping(value = { "/project/{projectId}" }, method = RequestMethod.GET)
@@ -81,7 +79,6 @@ public class ProjectController {
 		model.addAttribute("loggedUser", loggedUser);
 		model.addAttribute("projectForm", new Project());
 		return "addProject";
-
 	}
 
 	@RequestMapping(value = { "/projects/add" }, method = RequestMethod.POST)
@@ -89,8 +86,8 @@ public class ProjectController {
 			BindingResult projectBindingResult, Model model) {
 
 		User loggedUser = sessionData.getLoggedUser();
-
 		projectValidator.validate(project, projectBindingResult);
+		
 		if (!projectBindingResult.hasErrors()) {
 			project.setOwner(loggedUser);
 			this.projectService.saveProject(project);
@@ -102,7 +99,7 @@ public class ProjectController {
 
 	}
 	
-	@RequestMapping(value = {"/projects/share/{id}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/project/share/{id}"}, method = RequestMethod.POST)
 	public String shareProject(@Valid @ModelAttribute("shareForm") Credentials credentials , @PathVariable Long id, BindingResult projectBindingResult) {
 		
 	
@@ -113,6 +110,13 @@ public class ProjectController {
 			this.projectService.shareProjectWithUser(project,credentials.getUser()) ;
 			return "redirect:/projects/";
 		}
+		return "projects";
+	}
+	@RequestMapping(value = {"/project/{id}/delete"}, method = RequestMethod.POST)
+	public String shareProject( @PathVariable Long id) {
+		
+		Project project = projectService.getProject(id);
+		this.projectService.deleteProject(project);
 		return "projects";
 	}
 /*
