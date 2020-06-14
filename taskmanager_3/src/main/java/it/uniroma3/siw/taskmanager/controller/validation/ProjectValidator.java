@@ -33,7 +33,7 @@ public class ProjectValidator implements Validator {
 			errors.rejectValue("name", "size");
 
 		if (description.length()>MAX_DESCRIPTION_LENGTH)
-			errors.rejectValue("description", "required");
+			errors.rejectValue("description", "size");
 		
 	}
 
