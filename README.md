@@ -35,27 +35,27 @@ Progetto SIW 2020 - Task Manager
 
 ### Casi d'uso: User
 
-[x] Signup
-[x] Autenticazione
-[x] Visualizzare il mio profilo 
-[x] Aggiornare il mio profilo
+-[x] Signup
+-[x] Autenticazione
+-[x] Visualizzare il mio profilo 
+-[x] Aggiornare il mio profilo
 
 ### Casi d'uso: Project
 
-[x] Creare un nuovo progetto
-[x] Visualizzare i miei progetti
-[x] Visualizzare i progetti condivisi con me
-[ ] Aggiornare i dati di un mio progetto
-[ ] Cancellare un mio progetto
-[ ] Condividere un mio progetto con un altro utente
-[ ] Aggiungere un tag ad un mio progetto (estensione)
+-[x] Creare un nuovo progetto
+-[x] Visualizzare i miei progetti
+-[x] Visualizzare i progetti condivisi con me
+-[ ] Aggiornare i dati di un mio progetto
+-[ ] Cancellare un mio progetto
+-[ ] Condividere un mio progetto con un altro utente
+-[ ] Aggiungere un tag ad un mio progetto (estensione)
 
 ### Casi d'uso: Task
 
-[ ] Aggiungere un nuovo Task a un mio progetto
-[ ] Aggiornare un Task di un mio progetto
-[ ] Cancellare un Task da un mio progetto
-[ ] Assegnare un Task di un mio progetto ad un utente che ha visibilità sul mio progetto
-[ ] Aggiungere un Tag ad un task di un mio progetto (estensione)
-[ ] Aggiungere un Commento ad un Task di un progetto su cui ho visibilità (estensione)
+-[ ] Aggiungere un nuovo Task a un mio progetto
+-[ ] Aggiornare un Task di un mio progetto
+-[ ] Cancellare un Task da un mio progetto
+-[ ] Assegnare un Task di un mio progetto ad un utente che ha visibilità sul mio progetto
+-[ ] Aggiungere un Tag ad un task di un mio progetto (estensione)
+-[ ] Aggiungere un Commento ad un Task di un progetto su cui ho visibilità (estensione)
 
