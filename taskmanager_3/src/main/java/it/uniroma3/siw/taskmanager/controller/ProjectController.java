@@ -1,5 +1,6 @@
 package it.uniroma3.siw.taskmanager.controller;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,6 +19,7 @@ import it.uniroma3.siw.taskmanager.controller.validation.ProjectValidator;
 import it.uniroma3.siw.taskmanager.model.Credentials;
 import it.uniroma3.siw.taskmanager.model.Project;
 import it.uniroma3.siw.taskmanager.model.User;
+import it.uniroma3.siw.taskmanager.service.CredentialsService;
 import it.uniroma3.siw.taskmanager.service.ProjectService;
 import it.uniroma3.siw.taskmanager.service.UserService;
 
@@ -33,13 +35,23 @@ public class ProjectController {
 	ProjectValidator projectValidator;
 	@Autowired
 	SessionData sessionData;
+	
+	@Autowired
+	CredentialsService credentialsService;
 
 	@RequestMapping(value = { "/projects" }, method = RequestMethod.GET)
 	public String myOwnedProjects(Model model) {
 		User loggedUser = sessionData.getLoggedUser();
 		List<Project> projectsList = projectService.retrieveProjectsOwnedBy(loggedUser);
+		List<Project> memberOfProjects = projectService.retrieveProjectByMembers(loggedUser);
+		model.addAttribute("memberOfProjects",memberOfProjects);
+		
 		model.addAttribute("loggedUser", loggedUser);
 		model.addAttribute("projectsList", projectsList);
+		
+		
+		
+		
 		return "projects";
 
 	}
@@ -88,6 +100,20 @@ public class ProjectController {
 		model.addAttribute("loggedUser", loggedUser);
 		return "addProject";
 
+	}
+	
+	@RequestMapping(value = {"/projects/share/{id}"}, method = RequestMethod.GET)
+	public String shareProject(@Valid @ModelAttribute("shareForm") Credentials credentials , @PathVariable Long id, BindingResult projectBindingResult) {
+		
+	
+		
+		Project project = projectService.getProject(id);
+		if( this.credentialsService.getCredentials(credentials.getUserName()) != null) {
+			
+			this.projectService.shareProjectWithUser(project,credentials.getUser()) ;
+			return "redirect:/projects/";
+		}
+		return "projects";
 	}
 /*
 	@RequestMapping(value = { "/project/{id}/edit" }, method = RequestMethod.POST)

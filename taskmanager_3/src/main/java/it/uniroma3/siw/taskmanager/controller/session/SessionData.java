@@ -50,6 +50,8 @@ public class SessionData {
      *
      * @return the retrieved Credentials for the currently logged user
      */
+    
+    
     public User getLoggedUser() {
         if (this.user == null)
             this.update();

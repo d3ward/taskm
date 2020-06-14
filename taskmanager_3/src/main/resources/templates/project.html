@@ -12,11 +12,16 @@
 		<h1 th:text="${project.name}"></h1>
 		<h4 th:text="${project.description}" class="text-secondary"></h4>
 
-		<div th:if="${members.size()>0}">
+		<div >
 			<h3>Shared with:</h3>
 			<ul>
 				<li th:each="member : ${members}">
 					<div th:text="${member.firstName} + ' ' + ${member.lastName}"></div>
+					<form action="'/projects/share/'+ ${project.id}" id="shareForm" method="post">
+					<label>Share with:</label>
+					<input type="text" name="username" class="form-control" placeholder="USERNAME">
+					<input type="submit" name="submit" class="btn btn-primary"> 
+					</form>
 				</li>
 			</ul>
 
@@ -24,9 +29,9 @@
 
 		<h3>Tasks</h3>
 		<ul>
-			<li th:each="task :: ${project.tasks}">
+			<li th:each="task : ${project.tasks}">
 				<div th:text="${task.name}"></div>
-				<div th:text="${task.descriotion}" class="text-secondary"></div>
+				<div th:text="${task.description}" class="text-secondary"></div>
 		</ul>
 
 	</div>

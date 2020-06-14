@@ -59,6 +59,13 @@ public class ProjectService {
     	for(Project u:i) lista.add(u);
     	return lista;
     }
+    @Transactional
+    public List<Project> retrieveProjectByMembers(User user) {
+    	Iterable<Project> i = this.projectRepository.findByMembers(user);
+    	ArrayList<Project> lista = new ArrayList<>();
+    	for(Project u:i) lista.add(u);
+    	return lista;
+    }
 
     /**
      * This method saves a Project among the ones shared with a specific User.
