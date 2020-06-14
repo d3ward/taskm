@@ -5,6 +5,7 @@
 	th:replace="fragments/base.html :: headerfiles(title='Login Page')">
 </head>
 <body>
+	<navbar th:replace="fragments/base.html :: navbar"></navbar>
 	<div class="container mt-4">
 		<div class="row justify-content-center">
 			<form th:action="@{/login}" method="post"
@@ -14,22 +15,20 @@
 				<div th:if="${param.error}" class="alert bg-danger text-white"
 					id="errorMessage">Invalid username and password.</div>
 				<div class="form-group mt-4">
-					<label >Username</label> <input
-						type="text" class="form-control" name="username"
-						oninput="clearError()" />
+					<label>Username</label> <input type="text" class="form-control"
+						name="username" oninput="clearError()" />
 
 				</div>
 
 				<div class="form-group">
-					<label>Password</label><input class="form-control"
-						type="password" name="password" oninput="clearError()" />
+					<label>Password</label><input class="form-control" type="password"
+						name="password" oninput="clearError()" />
 
 				</div>
 
 				<div class="form-group">
 					<input type="submit" value="Sign in"
-						class="btn btn-primary shadow float-right" /> 
-						<a
+						class="btn btn-primary shadow float-right" /> <a
 						href="/users/register" class="align-middle">Don't have an
 						account ? Sign up</a>
 				</div>

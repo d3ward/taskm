@@ -5,6 +5,7 @@
 <head th:replace="fragments/base.html :: headerfiles(title='Admin')">
 </head>
 <body>
+<navbar th:replace="fragments/base.html :: navbar"></navbar>
 <h1 th:text="'Welcome, Master ' + ${user.firstName} + '!'"></h1>
 <h4><a href="/admin/users">You're the admin</a></h4>
 

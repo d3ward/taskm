@@ -1,25 +1,61 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="headerfiles(title)">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/74dac63344.js" crossorigin="anonymous"></script>
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title th:text="${title}"></title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+	crossorigin="anonymous">
+<script src="https://kit.fontawesome.com/74dac63344.js"
+	crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	crossorigin="anonymous"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
+<meta name="description" content="">
+<meta name="author" content="">
+<title th:text="${title}"></title>
 </head>
 <body>
-	<header th:fragment="intestazione">
-		<h1>TaskM</h1>
-	</header>
+	<nav th:fragment="navbar"
+		class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="/">TaskM</a>
+
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item "><a class="nav-link" href="/home">Home</a></li>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+					role="button" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false"> User</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="/projects">My Projects</a> <a
+							class="dropdown-item" href="/users/me">My profile</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="/logout">Logout</a>
+					</div></li>
+			</ul>
+		</div>
+	</nav>
 
 	<p>Go to the next page to see fragments in action</p>
 	<aside>
 		<div>This is a sidebar</div>
 	</aside>
 	<div class="another">This is another sidebar</div>
-	
+
 	<footer th:fragment="fondo">
 		<a th:href="@{/}">Home</a>
 	</footer>

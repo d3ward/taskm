@@ -7,22 +7,47 @@
 </head>
 
 <body>
-	<div class="container text-center mt-4">
+	<navbar th:replace="fragments/base.html :: navbar"></navbar>
+	<div class="container mt-4">
+		<div class="jumbotron text-center">
+			<h1 th:text="${project.name}"></h1>
+			<h4 th:text="${project.description}" class="text-secondary"></h4>
+		</div>
 
-		<h1 th:text="${project.name}"></h1>
-		<h4 th:text="${project.description}" class="text-secondary"></h4>
+		<form action="'/projects/delete/'+ ${project.id}" method="POST">
+			<div class="form-group">
+				<button class="btn bg-danger text-white" type="submit">
+					<i class="far fa-trash-alt"></i> Delete
+				</button>
+			</div>
+		</form>
+		<form action="'/projects/edit/'+ ${project.id}" method="POST">
+			<div class="form-group">
+				<button class="btn bg-success text-white" type="submit">
+					<i class="far fa-edit"></i> Edit
+				</button>
+			</div>
 
-		<div >
+		</form>
+		<div>
 			<h3>Shared with:</h3>
 			<ul>
 				<li th:each="member : ${members}">
 					<div th:text="${member.firstName} + ' ' + ${member.lastName}"></div>
-					<form action="'/projects/share/'+ ${project.id}" id="shareForm" method="post">
-					<label>Share with:</label>
-					<input type="text" name="username" class="form-control" placeholder="USERNAME">
-					<input type="submit" name="submit" class="btn btn-primary"> 
-					</form>
+
 				</li>
+				<form action="'/projects/share/'+ ${project.id}" id="shareForm"
+					method="POST">
+					<div class="input-group col-4">
+						<input type="text" class="form-control" placeholder="USERNAME"
+							name="username">
+						<div class="input-group-append">
+							<button class="btn btn-primary" type="submit">
+								<i class="far fa-share-square"></i>
+							</button>
+						</div>
+					</div>
+				</form>
 			</ul>
 
 		</div>

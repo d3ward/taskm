@@ -5,7 +5,7 @@
 <head
 	th:replace="fragments/base.html :: headerfiles(title='User Profile')"></head>
 <body>
-
+	<navbar th:replace="fragments/base.html :: navbar"></navbar>
 	<div class="container">
 
 		<h1>Your Profile</h1>
@@ -34,9 +34,12 @@
 				<td>Last Update at:</td>
 				<td th:text="${user.lastUpdateTimestamp}">...</td>
 			</tr>
-			
+
 		</table>
-		<div><a href="/users/me/update" class="btn btn-primary shadow mt-4">Update your profile</a> </div>
+		<div>
+			<a href="/users/me/update" class="btn btn-primary shadow mt-4">Update
+				your profile</a>
+		</div>
 	</div>
 
 

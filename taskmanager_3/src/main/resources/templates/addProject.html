@@ -7,32 +7,31 @@
 </head>
 
 <body>
+	<navbar th:replace="fragments/base.html :: navbar"></navbar>
 	<div class="container text-center mt-4">
 		<div class="row justify-content-center">
 			<form id="projectForm" th:action="@{/projects/add}"
-				th:object="${projectForm}"
-				method="POST" class="shadow p-3 m-2 mx-auto rounded "
-				autocomplete="off">
+				th:object="${projectForm}" method="POST"
+				class="shadow p-3 m-2 mx-auto rounded " autocomplete="off">
 				<h1>Create new Project</h1>
 				<div class="form-group ">
 					<label for="projectName">Project Name</label> <input
-						class="form-control" id=projectName type="text"
-						th:field="*{name}" placeholder="NAME" />
-					<small class="form-text text-muted"
-						th:if="${#fields.hasErrors('name')}"
-						th:errors="*{name}" th:style="'color:red'"></small>
+						class="form-control" id=projectName type="text" th:field="*{name}"
+						placeholder="NAME" /> <small class="form-text text-muted"
+						th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+						th:style="'color:red'"></small>
 				</div>
 				<div class="form-group ">
 					<label for="projectDescription">Description</label> <input
 						class="form-control" id="projectDescription" type="text"
-						th:field="*{description}" placeholder="Description" />
-					<small class="form-text text-muted"
+						th:field="*{description}" placeholder="Description" /> <small
+						class="form-text text-muted"
 						th:if="${#fields.hasErrors('description')}"
 						th:errors="*{description}" th:style="'color:red'"></small>
 				</div>
 
 				<div class="form-group">
-				<button type="submit" class="btn btn-primary"> Create </button>
+					<button type="submit" class="btn btn-primary">Create</button>
 				</div>
 			</form>
 		</div>

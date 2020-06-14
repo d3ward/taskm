@@ -5,6 +5,7 @@
 <head
 	th:replace="fragments/base.html :: headerfiles(title='Update Your Profile')"></head>
 <body>
+	<navbar th:replace="fragments/base.html :: navbar"></navbar>
 	<div class="container mt-4">
 		<form id="" th:action="@{/users/me/update}" method="POST"
 			class="shadow p-3 m-2 mx-auto rounded" autocomplete="off">
@@ -45,7 +46,8 @@
 						th:errors="${userForm.lastName}" th:style="'color:red'"> </small>
 				</div>
 				<div class="form-group">
-					<button type="submit" class="btn btn-primary"> Aggiorna profio</button>
+					<button type="submit" class="btn btn-primary">Aggiorna
+						profio</button>
 				</div>
 			</div>
 

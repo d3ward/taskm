@@ -5,6 +5,7 @@
 	th:replace="fragments/base.html :: headerfiles(title='Login Page')">
 </head>
 <body>
+	<navbar th:replace="fragments/base.html :: navbar"></navbar>
 	<div class="container text-center mt-4">
 		<form th:action="@{/login}" method="post">
 

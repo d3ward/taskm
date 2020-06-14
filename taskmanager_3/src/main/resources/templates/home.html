@@ -1,22 +1,30 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org">
 <head th:replace="fragments/base.html :: headerfiles(title='Home Page')">
-    <meta charset="UTF-8">
-    <title>TaskManager</title>
+<meta charset="UTF-8">
+<title>TaskManager</title>
 </head>
 <body>
-<div class="container text-center text-info mt-4">
+	<navbar th:replace="fragments/base.html :: navbar"></navbar>
+	<div class="container text-center text-info mt-4">
 
 
-<h1 th:text="'Welcome, ' + ${user.firstName} + '!'"></h1>
-<h4 class="font-weight-light mt-4 bg-info " ><a class=" text-white" href="/projects" >My Projects</a></h4>
-<h4 class="font-weight-light "><a  href="/index">Shared with me</a></h4>
-<h4 class="font-weight-light"><a href="/projects/add">Create new Project</a></h4>
-<h4 class="font-weight-light" ><a href="/users/me">Profile</a></h4>
-<h4 class="font-weight-light" ><a href="/logout">Logout</a></h4>
+		<h1 th:text="'Welcome, ' + ${user.firstName} + '!'"></h1>
+		<h4 class="font-weight-light mt-4 bg-info ">
+			<a class=" text-white" href="/projects">My Projects</a>
+		</h4>
+		
+		<h4 class="font-weight-light">
+			<a href="/projects/add">Create new Project</a>
+		</h4>
+		<h4 class="font-weight-light">
+			<a href="/users/me">Profile</a>
+		</h4>
+		<h4 class="font-weight-light">
+			<a href="/logout">Logout</a>
+		</h4>
 
-</div>
+	</div>
 </body>
 </html>
