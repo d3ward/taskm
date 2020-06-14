@@ -8,17 +8,27 @@
 
 <body>
 	<div class="container text-center mt-4">
-		<table>
-			<thead>
+		<table class="table table-bordered table-hover">
+			<thead class="thead-dark">
 				<tr>
-					<th>Name</th>
-					<th>Description</th>
+					<th scope="col">Name</th>
+					<th scope="col">Description</th>
+					<th scope="col">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="project : ${projectsList}">
-					<td ><a th:href="'/project/'+ ${project.id}" th:text="${project.name}">...</a></td>
+					<td><a th:href="'/project/'+ ${project.id}"
+						th:text="${project.name}">...</a></td>
 					<td th:text="${project.description}">..</td>
+					<td>
+						<a type="button" class="btn bg-success text-white">
+							<i class="far fa-edit"></i> Edit
+						</a>
+						<a type="button" class="btn bg-danger text-white">
+							<i class="far fa-trash-alt"></i> Delete
+						</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
