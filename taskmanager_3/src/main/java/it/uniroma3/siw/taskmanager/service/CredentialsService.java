@@ -73,4 +73,9 @@ public class CredentialsService {
             result.add(credentials);
         return result;
     }
+
+	public void deleteCredentials(String username) {
+		Optional<Credentials> credentials=this.credentialsRepository.findByUserName(username);
+		this.credentialsRepository.delete(credentials.get());
+	}
 }

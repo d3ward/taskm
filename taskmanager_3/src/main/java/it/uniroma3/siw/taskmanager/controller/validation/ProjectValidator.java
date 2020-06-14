@@ -15,6 +15,7 @@ public class ProjectValidator implements Validator {
 
 	final Integer MAX_NAME_LENGTH = 100;
 	final Integer MIN_NAME_LENGTH = 2;
+	final Integer MAX_DESCRIPTION_LENGTH = 1000;
 
 	@Autowired
 	ProjectService userService;
@@ -27,14 +28,13 @@ public class ProjectValidator implements Validator {
 		//User owner = p.getOwner();
 
 		if (name.trim().isEmpty())
-			errors.rejectValue("firstName", "required");
+			errors.rejectValue("name", "required");
 		else if (name.length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH)
-			errors.rejectValue("firstName", "size");
+			errors.rejectValue("name", "size");
 
-		if (description.trim().isEmpty())
-			errors.rejectValue("lastName", "required");
-		else if (description.length() < MIN_NAME_LENGTH || description.length() > MAX_NAME_LENGTH)
-			errors.rejectValue("lastName", "size");
+		if (description.length()>MAX_DESCRIPTION_LENGTH)
+			errors.rejectValue("description", "required");
+		
 	}
 
 	@Override

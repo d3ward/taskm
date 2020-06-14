@@ -14,7 +14,7 @@
 					<label for="userNameInput">Username</label> <input
 						class="form-control" id=userNameInput type="text"
 						th:field="${credentialsForm.userName}" placeholder="USERNAME" />
-					<small class="form-text text-muted"
+					<small class="form-text text-danger"
 						th:if="${#fields.hasErrors('credentialsForm.userName')}"
 						th:errors="${credentialsForm.userName}" th:style="'color:red'"></small>
 				</div>
@@ -22,7 +22,7 @@
 					<label for="passwordInput">Password</label> <input
 						class="form-control" id="passwordInput" type="password"
 						th:field="${credentialsForm.password}" placeholder="PASSWORD" />
-					<small class="form-text text-muted"
+					<small class="form-text text-danger"
 						th:if="${#fields.hasErrors('credentialsForm.password')}"
 						th:errors="${credentialsForm.password}" th:style="'color:red'"></small>
 				</div>
@@ -31,7 +31,7 @@
 					<label for="firstNameInput">First Name</label> <input
 						class="form-control" id="firstNameInput" type="text"
 						th:field="${userForm.firstName}" placeholder="FIRST NAME" /> <small
-						class="form-text text-muted"
+						class="form-text text-danger"
 						th:if="${#fields.hasErrors('userForm.firstName')}"
 						th:errors="${userForm.firstName}" th:style="'color:red'">
 					</small>
@@ -41,7 +41,7 @@
 					<label for="lastNameInput">Last Name</label> <input
 						class="form-control" id="lastNameInput" type="text"
 						th:field="${userForm.lastName}" placeholder="LAST NAME" /> <small
-						class="form-text text-muted"
+						class="form-text text-danger"
 						th:if="${#fields.hasErrors('userForm.lastName')}"
 						th:errors="${userForm.lastName}" th:style="'color:red'"> </small>
 				</div>

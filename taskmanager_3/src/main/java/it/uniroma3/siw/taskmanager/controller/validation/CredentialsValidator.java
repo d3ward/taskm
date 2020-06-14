@@ -29,8 +29,10 @@ public class CredentialsValidator implements Validator {
         Credentials credentials = (Credentials) o;
         
         String userName = credentials.getUserName().trim();
+        //Update profile
         Integer i = userName.indexOf("update=");
         userName.replaceAll("update=", "");
+       
         
         String password = credentials.getPassword().trim();
         

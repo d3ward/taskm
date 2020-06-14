@@ -6,26 +6,39 @@
 </head>
 <body>
 	<div class="container text-center mt-4">
-		<form th:action="@{/login}" method="post">
+		<div class="row justify-content-center">
+			<form th:action="@{/login}" method="post"
+				class="shadow p-3 m-2 mx-auto rounded " autocomplete="off">
 
-			<h1>Insert your credentials</h1>
+				<h1>Insert your credentials</h1>
 
-			<div class="form-group ">
-				<label class="mt-4">UserName: <input type="text"
-					name="username" />
-				</label>
-			</div>
+				<div th:if="${param.error}" class="alert bg-danger text-white"
+					id="errorMessage">Invalid username and password.</div>
+				<div class="form-group ">
 
-			<div class="form-group ">
-				<label>Password: <input type="password" name="password" />
-				</label>
-			</div>
+					<label for="userNameInput">Username</label> <input
+						class="form-control" id=userNameInput type="text"
+						placeholder="USERNAME" onchange="clearError()" />
+				</div>
 
-			<div>
-				<input type="submit" value="Sign " />
-			</div>
+				<div class="form-group ">
+					<label for="passwordInput">Password</label> <input
+						class="form-control" id="passwordInput" type="password"
+						placeholder="PASSWORD" />
+				</div>
 
-		</form>
+				<div class="form-group">
+					<button class="btn btn-primary shadow" type="submit">Login</button>
+				</div>
+
+			</form>
+		</div>
 	</div>
 </body>
+<script>
+	var errorMessage = document.getElementById("errorMessage");
+	function clearError() {
+		errorMessage.innerHTML="";
+	}
+</script>
 </html>

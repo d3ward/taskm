@@ -2,9 +2,13 @@ package it.uniroma3.siw.taskmanager.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +40,7 @@ public class ProjectController {
 			List<Project> projectsList = projectService.retrieveProjectsOwnedBy(loggedUser);
 			model.addAttribute("loggedUser",loggedUser);
 			model.addAttribute("projectsList",projectsList);
-			return "myOwnedProjects";
+			return "projects";
 			
 		}
 		@RequestMapping(value= {"/projects/{projectId"},method=RequestMethod.GET)
@@ -57,5 +61,32 @@ public class ProjectController {
 			return "project";
 
 		}
+		@RequestMapping(value= {"/project/add"},method=RequestMethod.GET)
+		public String createProjectForm(Model model) {
+			User loggedUser =sessionData.getLoggedUser();
+			model.addAttribute("loggedUser",loggedUser);
+			model.addAttribute("projectForm",new Project());
+			return "addProject";
+			
+		}
+		@RequestMapping(value= {"/project/add"},method=RequestMethod.POST)
+		public String createProject(@Valid @ModelAttribute("projectForm") Project project,
+				BindingResult projectBindingResult,
+				Model model) {
+			
+			User loggedUser =sessionData.getLoggedUser();
+			
+			projectValidator.validate(project, projectBindingResult);
+			if(!projectBindingResult.hasErrors()) {
+				project.setOwner(loggedUser);
+				this.projectService.saveProject(project);
+				return "redirect:/projects/"+project.getId();
+			}
+			
+			model.addAttribute("loggedUser",loggedUser);
+			return "addProject";
+			
+		}
+		
 		
 }
