@@ -45,9 +45,9 @@ Progetto SIW 2020 - Task Manager
 - [x] Creare un nuovo progetto
 - [x] Visualizzare i miei progetti
 - [x] Visualizzare i progetti condivisi con me
-- [ ] Aggiornare i dati di un mio progetto
+- [x] Aggiornare i dati di un mio progetto
 - [x] Cancellare un mio progetto
-- [ ] Condividere un mio progetto con un altro utente
+- [x] Condividere un mio progetto con un altro utente
 - [ ] Aggiungere un tag ad un mio progetto (estensione)
 
 ### Casi d'uso: Task
