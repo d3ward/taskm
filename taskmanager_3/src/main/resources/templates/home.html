@@ -2,54 +2,36 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="https://www.thymeleaf.org">
 <head th:replace="fragments/base.html :: headerfiles(title='Home Page')">
-<meta charset="UTF-8">
-<title>TaskManager</title>
 </head>
+<style th:replace="fragments/base.html :: boxes"></style>
 <style>
-.box {
-	padding: 20px;
-}
-
-.box>a {
-	height: 150px;
-	display: table;
-	width: 100%;
-	text-align: center;
-	text-decoration: none !important;
-	transition: 0.4s;
-}
-
-.box>a:hover {
-	transform: scale(1.1);
-	transition: 0.4s;
-}
-
-.box>a>span {
-	display: table-cell;
-	vertical-align: middle;
-	color: white;
-	font-size: 30px;
+.jumbotron {
+	background: rgb(174, 255, 0);
+	background: linear-gradient(100deg, rgba(174, 255, 0, 1) 0%,
+		rgba(2, 94, 23, 1) 100%);
 }
 </style>
 <body>
-	<navbar th:replace="fragments/base.html :: navbar"></navbar>
-	<div class="container text-center text-info mt-4">
-
-	<div class="jumbotron">
+	<div class="container text-center mt-4">
+		<navbar th:replace="fragments/base.html :: navbar"></navbar>
+		<div class="jumbotron mt-4">
 			<h1 th:text="'Welcome, ' + ${user.firstName} + '!'"></h1>
 		</div>
-		<div class="row border mt-4">
-			<div class="col-lg-3 col-md-4 col-6 box">
-				<a href="/projects"
-					class="shadow-lg border rounded bg-dark "> <span> <i class="fas fa-project-diagram"></i>  My Projects </span></a>
+		<div class="row mt-4">
+			<div class="col-lg-3 col-md-4 col-sm-8 box">
+				<a href="/projects" class="shadow-lg border rounded bg-dark "> <span>
+						<i class="fas fa-project-diagram"></i> My Projects
+				</span></a>
 			</div>
-			<div class="col-lg-3 col-md-4 col-6 box">
-				<a href="/users/me"
-					class="shadow-lg border rounded bg-dark "> <span> <i class="far fa-user"></i>  My Profile </span></a>
+			<div class="col-lg-3 col-md-4 col-sm-8 box">
+				<a href="/users/me" class="shadow-lg border rounded bg-dark "> <span>
+						<i class="far fa-user"></i> My Profile
+				</span></a>
 			</div>
-			<div class="col-lg-3 col-md-4 col-6 box">
-				<a href="/logout"
-					class="shadow-lg border rounded bg-danger "> <span> <i class="fas fa-sign-out-alt"></i> Logout </span></a>
+			<div class="col-lg-3 col-md-4 col-sm-8 box">
+				<a href="/logout" class="shadow-lg border rounded bg-danger "> <span>
+						<i class="fas fa-sign-out-alt"></i> Logout
+				</span></a>
 			</div>
 		</div>
 	</div>

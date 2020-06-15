@@ -7,9 +7,10 @@
 </head>
 
 <body>
-	<navbar th:replace="fragments/base.html :: navbar"></navbar>
+
 	<div class="container mt-4">
-		<div class="jumbotron text-center">
+		<navbar th:replace="fragments/base.html :: navbar"></navbar>
+		<div class="jumbotron text-center mt-4">
 			<h1 th:text="${project.name}"></h1>
 			<h4 th:text="${project.description}" class="text-secondary"></h4>
 			<h4 th:text="${owner}" th:if="${canEdit} == false "></h4>

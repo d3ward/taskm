@@ -4,50 +4,49 @@
 
 <head th:replace="fragments/base.html :: headerfiles(title='TaskM')">
 </head>
+<style th:replace="fragments/base.html :: boxes"></style>
 <style>
-.box {
-	padding: 20px;
-}
-
-.box>a {
-	height: 150px;
-	display: table;
-	width: 100%;
-	text-align: center;
-	text-decoration: none !important;
-	transition: 0.4s;
-}
-
-.box>a:hover {
-	transform: scale(1.1);
-	transition: 0.4s;
-}
-
-.box>a>span {
-	display: table-cell;
-	vertical-align: middle;
-	color: white;
-	font-size: 30px;
+.jumbotron {
+	background: rgb(0, 123, 255);
+	background: linear-gradient(100deg, rgba(0, 123, 255, 1) 0%,
+		rgba(40, 167, 69, 1) 100%);
 }
 </style>
 <body>
-	<navbar th:replace="fragments/base.html :: navbar"></navbar>
 	<div class="container text-center mt-4">
-		<div class="jumbotron shadow">
+		<navbar th:replace="fragments/base.html :: navbar"></navbar>
+		<div class="jumbotron shadow text-white mt-4">
 			<h1>Welcome to TaskM</h1>
 			<p>TaskM is a powerful task manager for you and your team</p>
 		</div>
 		<div class="row  mt-4 justify-content-center">
-			<div class="col-lg-3 col-md-4 col-6 box">
-				<a href="/login"
-					class="shadow-lg border rounded bg-success"> <span> <i class="fas fa-sign-in-alt"></i> Login</span></a>
+			<div class="col-lg-3 col-md-4 col-sm-8 box"
+				th:if="${isLogged != null }">
+				<a href="/home" class="shadow-lg  rounded bg-dark "> <span>
+						<i class="fas fa-home"></i> Home
+				</span></a>
 			</div>
-			<div class="col-lg-3 col-md-4 col-6 box">
-				<a href="/users/register"
-					class="shadow-lg border rounded bg-primary "> <span> <i class="fas fa-user-plus"></i>  Register </span></a>
+			<div class="col-lg-3 col-md-4 col-sm-8  box"
+				th:if="${isLogged == null }">
+				<a href="/login" class="shadow-lg  rounded bg-success"> <span>
+						<i class="fas fa-sign-in-alt"></i> Login
+				</span></a>
+			</div>
+			<div class="col-lg-3 col-md-4 col-sm-8 box"
+				th:if="${isLogged == null }">
+				<a href="/users/register" class="shadow-lg  rounded bg-primary ">
+					<span> <i class="fas fa-user-plus"></i> Register
+				</span>
+				</a>
+			</div>
+			<div class="col-lg-3 col-md-4 col-sm-8 box"
+				th:if="${isLogged != null }">
+				<a href="/logout" class="shadow-lg  rounded bg-danger "> <span>
+						<i class="fas fa-sign-out-alt"></i> Logout
+				</span></a>
 			</div>
 		</div>
-		
+
 	</div>
 
 </body>

@@ -5,8 +5,9 @@
 <head
 	th:replace="fragments/base.html :: headerfiles(title='Update Your Profile')"></head>
 <body>
-	<navbar th:replace="fragments/base.html :: navbar"></navbar>
+	
 	<div class="container mt-4">
+		<navbar th:replace="fragments/base.html :: navbar"></navbar>
 		<form id="" th:action="@{/users/me/update}" method="POST"
 			class="shadow p-3 m-2 mx-auto rounded" autocomplete="off">
 			<div class="form-group">

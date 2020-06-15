@@ -5,38 +5,13 @@
 <head
 	th:replace="fragments/base.html :: headerfiles(title='TaskM - My Projects')">
 </head>
-<style>
-.box {
-	padding: 20px;
-}
-
-.box>a {
-	height: 150px;
-	display: table;
-	width: 100%;
-	text-align: center;
-	text-decoration: none !important;
-	transition: 0.4s;
-}
-
-.box>a:hover {
-	transform: scale(1.1);
-	transition: 0.4s;
-}
-
-.box>a>span {
-	display: table-cell;
-	vertical-align: middle;
-	color: white;
-	font-size: 30px;
-}
-</style>
+<style th:replace="fragments/base.html :: boxes"></style>
 <body>
-	<navbar th:replace="fragments/base.html :: navbar"></navbar>
+
 	<div class="container text-center mt-4">
+		<navbar th:replace="fragments/base.html :: navbar"></navbar>
 
-
-		<div class="row border mt-4">
+		<div class="row mt-4">
 			<h3 class="col-12">Your projects</h3>
 			<div th:each="project : ${projectsList}"
 				class="col-lg-3 col-md-4 col-6 box">
@@ -45,11 +20,14 @@
 					th:text="${project.name}"></span></a>
 			</div>
 			<div class="col-lg-3 col-md-4 col-6 box">
-				<a href="/projects/add"
-					class="shadow-lg border rounded bg-dark "> <span> <i class="far fa-plus-square"></i> Create </span></a>
+				<a href="/projects/add" class="shadow-lg border rounded bg-dark ">
+					<span> <i class="far fa-plus-square"></i> Create
+				</span>
+				</a>
 			</div>
 		</div>
-		<div class="row border mt-4">
+		<hr>
+		<div class="row mt-4">
 			<h3 class="col-12">Progetti di cui fai parte</h3>
 			<div th:each="project : ${memberOfProjects}"
 				class="col-lg-3 col-md-4 col-6 box">

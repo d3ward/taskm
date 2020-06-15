@@ -5,13 +5,15 @@
 	th:replace="fragments/base.html :: headerfiles(title='Register User')">
 </head>
 <body>
-	<navbar th:replace="fragments/base.html :: navbar"></navbar>
+	
 	<div class="container mt-4">
-		<div class="row justify-content-center">
+	<navbar th:replace="fragments/base.html :: navbar"></navbar>
+		<div class="row justify-content-center mt-4">
 			<form id="registerUserForm" th:action="@{/users/register}"
 				method="POST" class="shadow p-3 m-2 mx-auto rounded "
 				autocomplete="off">
 				<h1>Register new User</h1>
+				<hr>
 				<div class="form-group ">
 					<label for="userNameInput">Username</label> <input
 						class="form-control" id=userNameInput type="text"
@@ -53,7 +55,7 @@
 
 				</div>
 				<div class="form-group">
-					<button class="btn btn-primary shadow float-right" type="submit">Register</button>
+					<button class="btn btn-primary shadow w-100" type="submit">Register</button>
 				</div>
 			</form>
 		</div>
