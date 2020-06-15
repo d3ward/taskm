@@ -56,8 +56,4 @@ public class UserService {
         return result;
     }
 
-	public List<User> getMembers(Project project) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

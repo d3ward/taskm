@@ -5,26 +5,53 @@
 <meta charset="UTF-8">
 <title>TaskManager</title>
 </head>
+<style>
+.box {
+	padding: 20px;
+}
+
+.box>a {
+	height: 150px;
+	display: table;
+	width: 100%;
+	text-align: center;
+	text-decoration: none !important;
+	transition: 0.4s;
+}
+
+.box>a:hover {
+	transform: scale(1.1);
+	transition: 0.4s;
+}
+
+.box>a>span {
+	display: table-cell;
+	vertical-align: middle;
+	color: white;
+	font-size: 30px;
+}
+</style>
 <body>
 	<navbar th:replace="fragments/base.html :: navbar"></navbar>
 	<div class="container text-center text-info mt-4">
 
-
-		<h1 th:text="'Welcome, ' + ${user.firstName} + '!'"></h1>
-		<h4 class="font-weight-light mt-4 bg-info ">
-			<a class=" text-white" href="/projects">My Projects</a>
-		</h4>
-		
-		<h4 class="font-weight-light">
-			<a href="/projects/add">Create new Project</a>
-		</h4>
-		<h4 class="font-weight-light">
-			<a href="/users/me">Profile</a>
-		</h4>
-		<h4 class="font-weight-light">
-			<a href="/logout">Logout</a>
-		</h4>
-
+	<div class="jumbotron">
+			<h1 th:text="'Welcome, ' + ${user.firstName} + '!'"></h1>
+		</div>
+		<div class="row border mt-4">
+			<div class="col-lg-3 col-md-4 col-6 box">
+				<a href="/projects"
+					class="shadow-lg border rounded bg-dark "> <span> <i class="fas fa-project-diagram"></i>  My Projects </span></a>
+			</div>
+			<div class="col-lg-3 col-md-4 col-6 box">
+				<a href="/users/me"
+					class="shadow-lg border rounded bg-dark "> <span> <i class="far fa-user"></i>  My Profile </span></a>
+			</div>
+			<div class="col-lg-3 col-md-4 col-6 box">
+				<a href="/logout"
+					class="shadow-lg border rounded bg-danger "> <span> <i class="fas fa-sign-out-alt"></i> Logout </span></a>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

@@ -66,6 +66,7 @@ public class ProjectService {
     	for(Project u:i) lista.add(u);
     	return lista;
     }
+  
 
     /**
      * This method saves a Project among the ones shared with a specific User.

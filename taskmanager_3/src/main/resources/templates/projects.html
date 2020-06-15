@@ -11,7 +11,7 @@
 }
 
 .box>a {
-	height: 100px;
+	height: 150px;
 	display: table;
 	width: 100%;
 	text-align: center;
@@ -43,6 +43,10 @@
 				<a th:href="'/project/'+ ${project.id}"
 					class="shadow-lg border rounded bg-dark "> <span
 					th:text="${project.name}"></span></a>
+			</div>
+			<div class="col-lg-3 col-md-4 col-6 box">
+				<a href="/projects/add"
+					class="shadow-lg border rounded bg-dark "> <span> <i class="far fa-plus-square"></i> Create </span></a>
 			</div>
 		</div>
 		<div class="row border mt-4">

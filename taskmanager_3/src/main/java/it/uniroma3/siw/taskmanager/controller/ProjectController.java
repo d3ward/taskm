@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import it.uniroma3.siw.taskmanager.controller.session.SessionData;
 import it.uniroma3.siw.taskmanager.controller.validation.ProjectValidator;
@@ -58,14 +59,18 @@ public class ProjectController {
 	public String project(Model model, @PathVariable Long projectId) {
 		User loggedUser = sessionData.getLoggedUser();
 		Project project = projectService.getProject(projectId);
+		
+		
 		if (project == null)
 			return "redirect:/projects";
-
-		List<User> members = userService.getMembers(project);
+		User user = project.getOwner(); 
+		List<User> members = project.getMembers();
 		if (!project.getOwner().equals(loggedUser) && !members.contains(loggedUser))
 			return "redirect:/projects";
-
+		
 		model.addAttribute("loggedUser", loggedUser);
+		model.addAttribute("canEdit", user.getId()==loggedUser.getId());
+		model.addAttribute("owner", user.getFirstName() + " " + user.getLastName());
 		model.addAttribute("project", project);
 		model.addAttribute("members", members);
 
@@ -99,25 +104,29 @@ public class ProjectController {
 
 	}
 	
-	@RequestMapping(value = {"/project/share/{id}"}, method = RequestMethod.POST)
-	public String shareProject(@Valid @ModelAttribute("shareForm") Credentials credentials , @PathVariable Long id, BindingResult projectBindingResult) {
+	@RequestMapping(value = {"/project/{id}/share"}, method = RequestMethod.POST)
+	public String shareProject(@RequestParam("username") String username , @PathVariable Long id) {
 		
 	
 		
 		Project project = projectService.getProject(id);
-		if( this.credentialsService.getCredentials(credentials.getUserName()) != null) {
+		
+		Credentials credentials =this.credentialsService.getCredentials(username) ;
+		if( credentials != null) {
 			
 			this.projectService.shareProjectWithUser(project,credentials.getUser()) ;
-			return "redirect:/projects/";
+			return "redirect:/projects";
 		}
-		return "projects";
+		return "redirect:/home";
 	}
+	
 	@RequestMapping(value = {"/project/{id}/delete"}, method = RequestMethod.POST)
-	public String shareProject( @PathVariable Long id) {
+	public String deleteProject( @PathVariable Long id) {
 		
 		Project project = projectService.getProject(id);
+		
 		this.projectService.deleteProject(project);
-		return "projects";
+		return "redirect:/projects";
 	}
 /*
 	@RequestMapping(value = { "/project/{id}/edit" }, method = RequestMethod.POST)

@@ -12,23 +12,30 @@
 		<div class="jumbotron text-center">
 			<h1 th:text="${project.name}"></h1>
 			<h4 th:text="${project.description}" class="text-secondary"></h4>
+			<h4 th:text="${owner}" th:if="${canEdit} == false "></h4>
+			<h4 th:if="${canEdit} ==  true ">Tu sei il proprietario di
+				questo progetto</h4>
+			<form th:if="${canEdit} == true "
+				th:action="@{'/project/' + ${project.id} + '/delete'}" method="POST"
+				class="float-right m-1">
+				<div class="form-group">
+					<button class="btn bg-danger text-white" type="submit">
+						<i class="far fa-trash-alt"></i> Delete
+					</button>
+				</div>
+			</form>
+			<form th:if="${canEdit} == true "
+				th:action="@{'/project/' + ${project.id} + 'update'}" method="POST"
+				class="float-right m-1">
+				<div class="form-group">
+					<button class="btn bg-success text-white" type="submit">
+						<i class="far fa-edit"></i> Edit
+					</button>
+				</div>
+
+			</form>
 		</div>
 
-		<form th:action="@{'/project/' + ${project.id} + '/delete'}" method="POST">
-			<div class="form-group">
-				<button class="btn bg-danger text-white" type="submit">
-					<i class="far fa-trash-alt"></i> Delete
-				</button>
-			</div>
-		</form>
-		<form th:action="@{'/project/' + ${project.id} + '/)update'}" method="POST">
-			<div class="form-group">
-				<button class="btn bg-success text-white" type="submit">
-					<i class="far fa-edit"></i> Edit
-				</button>
-			</div>
-
-		</form>
 		<div>
 			<h3>Shared with:</h3>
 			<ul>
@@ -36,20 +43,21 @@
 					<div th:text="${member.firstName} + ' ' + ${member.lastName}"></div>
 
 				</li>
-				<form th:action="@{'/project/share/'+ ${project.id}}" id="shareForm"
-					method="POST">
-					<div class="input-group col-4">
-						<input type="text" class="form-control" placeholder="USERNAME"
-							name="username">
-						<div class="input-group-append">
-							<button class="btn btn-primary" type="submit">
-								<i class="far fa-share-square"></i>
-							</button>
-						</div>
-					</div>
-				</form>
-			</ul>
 
+			</ul>
+			<form th:if="${canEdit} == true "
+				th:action="@{'/project/'+ ${project.id} + '/share'}" method="POST">
+
+				<div class="input-group col-4">
+					<input type="text" class="form-control" placeholder="USERNAME"
+						name="username">
+					<div class="input-group-append">
+						<button class="btn btn-primary" type="submit">
+							<i class="far fa-share-square"></i>
+						</button>
+					</div>
+				</div>
+			</form>
 		</div>
 
 		<h3>Tasks</h3>
