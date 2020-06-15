@@ -25,7 +25,11 @@ public class Task {
      */
     @Column(nullable = false, length = 100)
     private String name;
-
+    /**
+     * Project for this task
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Project project;
     /**
      * Description for this task
      */
@@ -37,6 +41,11 @@ public class Task {
      */
     @Column(nullable = false)
     private boolean completed;
+    
+    /*
+	@ManyToMany
+	private List<ProjectTag> tags;	//Lista di tag del task
+	*/
 
     /**
      * Timestamp for the instant this Task was created/loaded into the DB
@@ -145,4 +154,12 @@ public class Task {
     public int hashCode() {
         return Objects.hash(name, completed, creationTimestamp, lastUpdateTimestamp);
     }
+
+    public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
 }

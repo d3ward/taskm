@@ -49,44 +49,82 @@
 				th:action="@{'/project/'+ ${project.id} + '/share'}" method="POST">
 
 				<div class="row">
-				<div class="input-group  col-4">
-					<input type="text" class="form-control" placeholder="USERNAME"
-						name="username">
-					<div class="input-group-append">
-						<button class="btn btn-primary" type="submit">
-							<i class="far fa-share-square"></i>
-						</button>
+					<div class="input-group  col-md-4 col-sm-8">
+						<input type="text" class="form-control" placeholder="USERNAME"
+							name="username">
+						<div class="input-group-append">
+							<button class="btn btn-primary" type="submit">
+								<i class="far fa-share-square"></i>
+							</button>
+						</div>
 					</div>
-				</div>
 				</div>
 			</form>
 		</div>
 
-		<h3 >Tasks</h3>
-		<ul>
-			<li th:each="task : ${project.tasks}">
-				<div th:text="${task.name}"></div>
-				<div th:text="${task.description}" class="text-secondary"></div>
-		</ul>
+		<h3>Tasks</h3>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">Nome</th>
+					<th scope="col">Descrizione</th>
+					<th scope="col" th:if="${canEdit} == true ">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="task : ${project.tasks}">
+					<th><a th:if="${task.completed} == false "
+						th:href="'/project/'+ ${project.id}+'/completeTask/' + ${task.id}"
+						class="btn text-primary p-0" type="submit"><i
+							class="far fa-square" style="font-size: 30px;"></i></a> <a
+						th:if="${task.completed} == true "
+						th:href="'/project/'+ ${project.id}+'/completeTask/' + ${task.id}"
+						class="btn text-primary p-0" type="submit"><i
+							class="far fa-check-square" style="font-size: 30px;"></i></a></th>
+					<td th:text="${task.name}"></td>
+					<td th:text="${task.description}" class="text-secondary"></td>
+					<td th:if="${canEdit} == true "><a
+						th:href="'/project/'+ ${project.id}+'/editTask/' + ${task.id}"
+						class="btn bg-success text-white" type="submit"> <i
+							class="far fa-edit"></i></a> <a
+						th:href="'/project/'+ ${project.id}+'/deleteTask/' + ${task.id}"
+						class="btn bg-danger text-white" type="submit"><i
+							class="far fa-trash-alt"></i></a></td>
+				</tr>
+			</tbody>
+		</table>
+
+
 		<form name="taskForm" th:if="${canEdit} == true "
 			th:action="@{'/project/'+ ${project.id} + '/task'}" method="POST">
 			<div class="row">
-			
-			
-			<div class="input-group col-2">
-				<input type="text" class="form-control" placeholder="NAME"
-					name="name">
-			</div>
-			
-			<div class="input-group col-3">
-				<input type="text" class="form-control" placeholder="DESCRIPTION"
-					name="description">
-				
-			</div>
-			<button class="btn btn-primary" type="submit">
+
+
+				<div class="input-group col-md-2 col-sm-5">
+					<input type="text" class="form-control" placeholder="NAME"
+						name="name">
+				</div>
+
+				<div class="input-group col-md-3 col-sm-5 ">
+					<input type="text" class="form-control" placeholder="DESCRIPTION"
+						name="description">
+
+				</div>
+				<div class="input-group col-md-3 col-sm-5 ">
+					<select class="custom-select mb-3">
+						<option selected>Myself</option>
+						<option th:each="member : ${members}"
+							th:text="${member.firstName} + ' ' + ${member.lastName}">
+						</option>
+					</select>
+				</div>
+				<div class="input-group col-md-3 col-sm-5 ">
+					<button class="btn btn-primary" type="submit">
 						<i class="fas fa-plus"></i>
 					</button>
-			
+				</div>
+
 			</div>
 		</form>
 

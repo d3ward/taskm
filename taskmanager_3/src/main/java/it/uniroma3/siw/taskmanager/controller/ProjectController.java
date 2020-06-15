@@ -26,7 +26,6 @@ import it.uniroma3.siw.taskmanager.service.ProjectService;
 import it.uniroma3.siw.taskmanager.service.TaskService;
 import it.uniroma3.siw.taskmanager.service.UserService;
 
-import static it.uniroma3.siw.taskmanager.model.Credentials.ADMIN_ROLE;
 
 @Controller
 public class ProjectController {
@@ -116,16 +115,13 @@ public class ProjectController {
 	
 	@RequestMapping(value = {"/project/{id}/share"}, method = RequestMethod.POST)
 	public String shareProject(@RequestParam("username") String username , @PathVariable Long id) {
-		
-	
-		
 		Project project = projectService.getProject(id);
-		
 		Credentials credentials =this.credentialsService.getCredentials(username) ;
+		
 		if( credentials != null) {
-			
 			this.projectService.shareProjectWithUser(project,credentials.getUser()) ;
-			return "redirect:/projects";
+			
+			return "redirect:/project/"+id;
 		}
 		return "redirect:/home";
 	}
@@ -137,6 +133,20 @@ public class ProjectController {
 		
 		this.projectService.deleteProject(project);
 		return "redirect:/projects";
+	}
+	
+	@RequestMapping(value = {"/project/{idP}/deleteTask/{id}"}, method = RequestMethod.GET)
+	public String deleteTask( @PathVariable Long id,@PathVariable Long idP) {
+		Task task= this.taskService.getTask(id);
+		this.taskService.deleteTask(task);
+		return "redirect:/project/"+idP;
+	}
+	@RequestMapping(value = {"/project/{idP}/completeTask/{id}"}, method = RequestMethod.GET)
+	public String completeTask( @PathVariable Long id,@PathVariable Long idP) {
+		Task task= this.taskService.getTask(id);
+		task.setCompleted(!task.isCompleted());
+		this.taskService.saveTask(task);
+		return "redirect:/project/"+idP;
 	}
 	
 	@RequestMapping(value = { "/project/{id}/edit" }, method = RequestMethod.POST)
@@ -152,19 +162,11 @@ public class ProjectController {
 			BindingResult projectBindingResult, Model model, @PathVariable Long id) {
 		// validate project fields
 		this.projectValidator.validate(projectForm, projectBindingResult);
-
-		
-		if ( !projectBindingResult.hasErrors()) {
-			
+		if ( !projectBindingResult.hasErrors()) {	
 			Project project = projectService.getProject(id);
-
-			
 			project.setName(projectForm.getName());
 			project.setDescription(projectForm.getDescription());
-
 			this.projectService.saveProject(project);
-		
-
 			User loggedUser = sessionData.getLoggedUser();
 			model.addAttribute("user", loggedUser);
 			return "redirect:/project/ " + id ;
@@ -176,21 +178,18 @@ public class ProjectController {
 	@RequestMapping(value = {"/project/{id}/task"}, method = RequestMethod.POST)
 	public String newTask(@Valid @ModelAttribute("taskForm") Task task,  @PathVariable Long id, BindingResult taskBindingResult ) {
 		
-		Project project = projectService.getProject(id);
+		Project project = this.projectService.getProject(id);
 		
 		if(!taskBindingResult.hasErrors()) {
-			project.addTask(task);
-
+			task.setProject(project);
 			this.taskService.saveTask(task);
-			
-			
-			this.projectService.saveProject(project);
+			return "redirect:/project/"+id;
 			
 		}
+		return "redirect:/projects";
 		
 		
 		
-		return "redirect:/project/"+id;
 	}
 	
 	
