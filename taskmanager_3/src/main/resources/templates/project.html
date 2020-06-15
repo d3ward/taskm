@@ -25,7 +25,7 @@
 				</div>
 			</form>
 			<form th:if="${canEdit} == true "
-				th:action="@{'/project/' + ${project.id} + 'update'}" method="POST"
+				th:action="@{'/project/' + ${project.id} + '/edit'}" method="POST"
 				class="float-right m-1">
 				<div class="form-group">
 					<button class="btn bg-success text-white" type="submit">

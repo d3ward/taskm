@@ -23,6 +23,8 @@ import it.uniroma3.siw.taskmanager.service.CredentialsService;
 import it.uniroma3.siw.taskmanager.service.ProjectService;
 import it.uniroma3.siw.taskmanager.service.UserService;
 
+import static it.uniroma3.siw.taskmanager.model.Credentials.ADMIN_ROLE;
+
 @Controller
 public class ProjectController {
 
@@ -128,31 +130,40 @@ public class ProjectController {
 		this.projectService.deleteProject(project);
 		return "redirect:/projects";
 	}
-/*
+	
 	@RequestMapping(value = { "/project/{id}/edit" }, method = RequestMethod.POST)
+	public String updateProfile(Model model, @PathVariable Long id) {
+		Project project = this.projectService.getProject(id);
+		model.addAttribute("projectForm", project);
+		return "updateProject";
+	}
+	
+
+	@RequestMapping(value = { "/project/edit/{id}" }, method = RequestMethod.POST)
 	public String editProject(@Valid @ModelAttribute("projectForm") Project projectForm,
 			BindingResult projectBindingResult, Model model, @PathVariable Long id) {
 		// validate project fields
 		this.projectValidator.validate(projectForm, projectBindingResult);
 
-		Project project = projectService.getProject(id);
-		Credentials visitor = sessionData.getLoggedCredentials();
-		if (project != null) {
-			if (!projectBindingResult.hasErrors()) {
-				if (visitor.getRole().equals(ADMIN_ROLE)
-						|| project.getOwner().getId().equals(visitor.getUser().getId())) {
-					// Only admins/owners can edit project
-					project.setName(projectForm.getName());
-					project.setDescription(projectForm.getDescription());
-					projectService.saveProject(project);
-					sessionData.invalidate();
-				}
-				return "redirect:/project/" + id;
-			}
-			model.addAttribute("visitor", visitor);
-			return "projectEdit";
+		
+		if ( !projectBindingResult.hasErrors()) {
+			
+			Project project = projectService.getProject(id);
+
+			
+			project.setName(projectForm.getName());
+			project.setDescription(projectForm.getDescription());
+
+			projectService.saveProject(project);
+		
+
+			User loggedUser = sessionData.getLoggedUser();
+			model.addAttribute("user", loggedUser);
+			return "redirect:/project/ " + id ;
 		}
-		return "redirect:/project/" + id;
-	}*/
+
+		return "updateProject";
+	
+	}
 
 }
