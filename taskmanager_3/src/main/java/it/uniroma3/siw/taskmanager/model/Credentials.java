@@ -67,7 +67,15 @@ public class Credentials {
         this.password = password;
     }
 
-    /**
+    public Credentials(String userName, String password, String adminRole, User user) {
+    	this();
+    	this.userName = userName;
+        this.password = password;
+        this.user=user;
+        this.role=adminRole;
+	}
+
+	/**
      * This method initializes the creationTimestamp and lastUpdateTimestamp of this User to the current instant.
      * This method is called automatically just before the User is persisted thanks to the @PrePersist annotation.
      */
