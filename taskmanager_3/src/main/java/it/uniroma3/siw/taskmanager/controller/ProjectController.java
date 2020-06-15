@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import it.uniroma3.siw.taskmanager.controller.session.SessionData;
 import it.uniroma3.siw.taskmanager.controller.validation.ProjectValidator;
+import it.uniroma3.siw.taskmanager.controller.validation.TaskValidator;
 import it.uniroma3.siw.taskmanager.model.Credentials;
 import it.uniroma3.siw.taskmanager.model.Project;
+import it.uniroma3.siw.taskmanager.model.Task;
 import it.uniroma3.siw.taskmanager.model.User;
 import it.uniroma3.siw.taskmanager.service.CredentialsService;
 import it.uniroma3.siw.taskmanager.service.ProjectService;
+import it.uniroma3.siw.taskmanager.service.TaskService;
 import it.uniroma3.siw.taskmanager.service.UserService;
 
 import static it.uniroma3.siw.taskmanager.model.Credentials.ADMIN_ROLE;
@@ -32,6 +35,8 @@ public class ProjectController {
 	ProjectService projectService;
 
 	@Autowired
+	TaskService taskService;
+	@Autowired
 	UserService userService;
 	@Autowired
 	ProjectValidator projectValidator;
@@ -40,7 +45,9 @@ public class ProjectController {
 	
 	@Autowired
 	CredentialsService credentialsService;
-
+	
+	@Autowired
+	TaskValidator taskValidator;
 	
 	@RequestMapping(value = { "/projects" }, method = RequestMethod.GET)
 	public String myProjects(Model model) {
@@ -69,6 +76,7 @@ public class ProjectController {
 		List<User> members = project.getMembers();
 		if (!project.getOwner().equals(loggedUser) && !members.contains(loggedUser))
 			return "redirect:/projects";
+		
 		
 		model.addAttribute("loggedUser", loggedUser);
 		model.addAttribute("canEdit", user.getId()==loggedUser.getId());
@@ -154,7 +162,7 @@ public class ProjectController {
 			project.setName(projectForm.getName());
 			project.setDescription(projectForm.getDescription());
 
-			projectService.saveProject(project);
+			this.projectService.saveProject(project);
 		
 
 			User loggedUser = sessionData.getLoggedUser();
@@ -163,7 +171,28 @@ public class ProjectController {
 		}
 
 		return "updateProject";
-	
 	}
+	
+	@RequestMapping(value = {"/project/{id}/task"}, method = RequestMethod.POST)
+	public String newTask(@Valid @ModelAttribute("taskForm") Task task,  @PathVariable Long id, BindingResult taskBindingResult ) {
+		
+		Project project = projectService.getProject(id);
+		
+		if(!taskBindingResult.hasErrors()) {
+			project.addTask(task);
+
+			this.taskService.saveTask(task);
+			
+			
+			this.projectService.saveProject(project);
+			
+		}
+		
+		
+		
+		return "redirect:/project/"+id;
+	}
+	
+	
 
 }

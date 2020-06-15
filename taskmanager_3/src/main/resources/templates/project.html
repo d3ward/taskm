@@ -36,7 +36,7 @@
 			</form>
 		</div>
 
-		<div>
+		<div class="mb-3">
 			<h3>Shared with:</h3>
 			<ul>
 				<li th:each="member : ${members}">
@@ -48,7 +48,8 @@
 			<form th:if="${canEdit} == true "
 				th:action="@{'/project/'+ ${project.id} + '/share'}" method="POST">
 
-				<div class="input-group col-4">
+				<div class="row">
+				<div class="input-group  col-4">
 					<input type="text" class="form-control" placeholder="USERNAME"
 						name="username">
 					<div class="input-group-append">
@@ -57,15 +58,37 @@
 						</button>
 					</div>
 				</div>
+				</div>
 			</form>
 		</div>
 
-		<h3>Tasks</h3>
+		<h3 >Tasks</h3>
 		<ul>
 			<li th:each="task : ${project.tasks}">
 				<div th:text="${task.name}"></div>
 				<div th:text="${task.description}" class="text-secondary"></div>
 		</ul>
+		<form name="taskForm" th:if="${canEdit} == true "
+			th:action="@{'/project/'+ ${project.id} + '/task'}" method="POST">
+			<div class="row">
+			
+			
+			<div class="input-group col-2">
+				<input type="text" class="form-control" placeholder="NAME"
+					name="name">
+			</div>
+			
+			<div class="input-group col-3">
+				<input type="text" class="form-control" placeholder="DESCRIPTION"
+					name="description">
+				
+			</div>
+			<button class="btn btn-primary" type="submit">
+						<i class="fas fa-plus"></i>
+					</button>
+			
+			</div>
+		</form>
 
 	</div>
 
