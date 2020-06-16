@@ -2,7 +2,6 @@ package it.uniroma3.siw.taskmanager.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -12,7 +11,7 @@ import java.util.Objects;
  * The Task can be marked as "completed".
  */
 @Entity
-public class Task {
+public class Tag {
 
     /**
      * Unique identifier for this Task
@@ -29,26 +28,24 @@ public class Task {
     /**
      * Project for this task
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Project project;
     /**
      * Description for this task
      */
-    @Column
-    private String description;
-    
-    @Column
-    private String assignedTo;
-
+    @Column(nullable=false)
+    public String color;
     /**
      * Boolean flag specifying whether this Task is completed or not
      */
-    @Column(nullable = false)
-    private boolean completed;
+
+    @Column
+    public String description;
     
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name= "task_id")  
-    private List<Tag> tags;
+    /*
+	@ManyToMany
+	private List<ProjectTag> tags;	//Lista di tag del task
+	*/
 
     /**
      * Timestamp for the instant this Task was created/loaded into the DB
@@ -62,17 +59,36 @@ public class Task {
     @Column(nullable = false)
     private LocalDateTime lastUpdateTimestamp;
 
-    public Task() {}
+    public Tag() {}
 
-    public Task(String name,
-                String description,
-                boolean completed) {
+    
+    public Tag(String name, String description, String color) {
         this.name = name;
+        this.color = color;
         this.description = description;
-        this.completed = completed;
     }
 
-    /**
+    public String getColor() {
+		return color;
+	}
+
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+	/**
      * This method initializes the creationTimestamp and lastUpdateTimestamp of this User to the current instant.
      * This method is called automatically just before the User is persisted thanks to the @PrePersist annotation.
      */
@@ -111,28 +127,7 @@ public class Task {
     }
     
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-    public String getAssignedTo() {
-        return assignedTo;
-    }
-
-    public void setAssignedTo(String username) {
-        this.assignedTo = username;
-    }
+   
 
     public LocalDateTime getCreationTimestamp() {
         return creationTimestamp;
@@ -154,16 +149,16 @@ public class Task {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return completed == task.completed &&
-               Objects.equals(name, task.name) &&
-                Objects.equals(creationTimestamp, task.creationTimestamp) &&
-                Objects.equals(lastUpdateTimestamp, task.lastUpdateTimestamp);
+        Tag tag = (Tag) o;
+        return Objects.equals(color,tag.color ) &&
+               Objects.equals(name, tag.name) &&
+                Objects.equals(creationTimestamp, tag.creationTimestamp) &&
+                Objects.equals(lastUpdateTimestamp, tag.lastUpdateTimestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, completed, creationTimestamp, lastUpdateTimestamp);
+        return Objects.hash(name, creationTimestamp, lastUpdateTimestamp);
     }
 
     public Project getProject() {

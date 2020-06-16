@@ -19,6 +19,7 @@ import it.uniroma3.siw.taskmanager.controller.validation.ProjectValidator;
 import it.uniroma3.siw.taskmanager.controller.validation.TaskValidator;
 import it.uniroma3.siw.taskmanager.model.Credentials;
 import it.uniroma3.siw.taskmanager.model.Project;
+import it.uniroma3.siw.taskmanager.model.Tag;
 import it.uniroma3.siw.taskmanager.model.Task;
 import it.uniroma3.siw.taskmanager.model.User;
 import it.uniroma3.siw.taskmanager.service.CredentialsService;
@@ -70,9 +71,11 @@ public class ProjectController {
 			return "redirect:/projects";
 		User user = project.getOwner();
 		List<User> members = project.getMembers();
+		List<Tag> tags = project.getTags();
 		if (!project.getOwner().equals(loggedUser) && !members.contains(loggedUser))
 			return "redirect:/projects";
 
+		model.addAttribute("tags",tags);
 		model.addAttribute("loggedUser", loggedUser);
 		model.addAttribute("canEdit", user.getId() == loggedUser.getId());
 		model.addAttribute("owner", user.getFirstName() + " " + user.getLastName());
@@ -147,7 +150,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = { "/project/{id}/edit" }, method = RequestMethod.POST)
-	public String updateProfile(Model model, @PathVariable Long id) {
+	public String updateProject(Model model, @PathVariable Long id) {
 		Project project = this.projectService.getProject(id);
 		model.addAttribute("projectForm", project);
 		return "updateProject";
@@ -184,7 +187,43 @@ public class ProjectController {
 
 		}
 		return "redirect:/projects";
-
 	}
+	
+	
+	@RequestMapping(value = { "/project/{idP}/editTask/{id}" }, method = RequestMethod.GET)
+	public String updateTask(Model model, @PathVariable Long id, @PathVariable Long idP) {
+		Task task = this.taskService.getTask(id);
+		Project project = this.projectService.getProject(idP);
+		List<User> members = project.getMembers();
+		User loggedUser = sessionData.getLoggedUser();
+		model.addAttribute("members",members);
+		model.addAttribute("project",project);
+		model.addAttribute("task",task);
+		model.addAttribute("loggedUser",loggedUser);
+		return "editTask";
+	}
+	
+	@RequestMapping(value = { "/project/{idP}/taskEdit/{id}" }, method = RequestMethod.POST)
+	public String editTask(@Valid @ModelAttribute("task") Task taskForm,
+			BindingResult taskBindingResult, Model model, @PathVariable Long id,@PathVariable Long idP) {
+		// validate project fields
+		this.taskValidator.validate(taskForm, taskBindingResult);
+		if (!taskBindingResult.hasErrors()) {
+			Task task= taskService.getTask(id);
+			task.setName(taskForm.getName());
+			task.setDescription(taskForm.getDescription());
+			task.setAssignedTo(taskForm.getAssignedTo());
+			this.taskService.saveTask(task);
+			User loggedUser = sessionData.getLoggedUser();
+			model.addAttribute("user", loggedUser);
+			return "redirect:/project/ " + idP;
+		}
+
+		return "updateProject";
+	}
+	
+	
+
+	
 
 }

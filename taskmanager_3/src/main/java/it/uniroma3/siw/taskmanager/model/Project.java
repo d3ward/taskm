@@ -1,6 +1,10 @@
 package it.uniroma3.siw.taskmanager.model;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +41,15 @@ public class Project {
      */
     @ManyToOne(fetch = FetchType.EAGER)
     private User owner;
-
+ 
+    
+    /**
+     * lista tag del progetto
+     */
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name= "project_id")  
+    private List<Tag> tags;
+    
     /**
      * Name for this Project
      */
@@ -102,6 +114,14 @@ public class Project {
 
     public List<User> getMembers() {
         return members;
+    }
+    
+    public void addTag(Tag tag) {
+    	this.tags.add(tag);
+    }
+    
+    public List<Tag> getTags() {
+    	return tags;
     }
 
     public void setMembers(List<User> members) {

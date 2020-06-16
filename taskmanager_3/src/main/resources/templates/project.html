@@ -35,6 +35,11 @@
 				</div>
 
 			</form>
+			<div class="float-left bg-secondary">
+			<span th:each="tag : ${tags}" th:text="${tag.name}" class="badge badge-primary">Primary</span>
+			</div>
+			
+			
 		</div>
 
 		<div class="mb-3">
@@ -88,7 +93,7 @@
 					<td th:text="${task.description}" class="text-secondary"></td>
 					<td th:text="${task.assignedTo}" class="text-secondary"></td>
 					<td th:if="${canEdit} == true "><a
-						th:href="'/project/'+ ${project.id}+'/editTask/' + ${task.id}"
+						th:href="'/project/'+${project.id}+ '/editTask/' + ${task.id}"
 						class="btn bg-success text-white" type="submit"> <i
 							class="far fa-edit"></i></a> <a
 						th:href="'/project/'+ ${project.id}+'/deleteTask/' + ${task.id}"
@@ -112,7 +117,6 @@
 				<div class="input-group col-md-3 col-sm-5 ">
 					<input type="text" class="form-control" placeholder="DESCRIPTION"
 						name="description">
-
 				</div>
 				<div class="input-group col-md-3 col-sm-5 ">
 					<select class="custom-select mb-3" name="assignedTo">

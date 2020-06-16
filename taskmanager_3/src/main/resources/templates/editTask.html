@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org">
+
+<head
+	th:replace="fragments/base.html :: headerfiles(title='Edit your Task')"></head>
+<body>
+
+	<div class="container mt-4">
+		<navbar th:replace="fragments/base.html :: navbar"></navbar>
+		<form id="" th:action="@{'/project/'+${project.id}+'/taskEdit/'+ ${task.id}}"
+			method="POST" class="shadow p-3 m-2 mx-auto rounded"
+			autocomplete="off" >
+			<div class="form-group ">
+				<label for="taskName">Name</label> <input
+					class="form-control" name="name" type="text" th:field="${task.name}"
+					placeholder="NAME" /> 
+			</div>
+			<div class="form-group ">
+				<label for="taskDescription">Description</label> <input
+					class="form-control" name="description" type="text"
+					th:field="${task.description}" placeholder="Description" /> 
+			</div>
+			<div class="form-group col-md-3 col-sm-5 ">
+					<select class="custom-select mb-3" name="assignedTo" >
+						<option th:text="${loggedUser.firstName} + ' ' + ${loggedUser.lastName}" th:selected="${task.assignedTo.contains(loggedUser.lastName)}"></option>
+						<option  th:each="member : ${members} " th:selected="${task.assignedTo.contains(member.lastName)}"
+							th:text="${member.firstName} + ' ' + ${member.lastName}">
+						</option>
+					</select>
+				</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary">Aggiorna
+					task</button>
+			</div>
+		</form>
+	</div>
+
+</body>
+
+
+
+</html>
