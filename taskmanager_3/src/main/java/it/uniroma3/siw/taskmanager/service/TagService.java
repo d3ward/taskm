@@ -6,11 +6,13 @@ import java.util.Optional;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.uniroma3.siw.taskmanager.model.Tag;
 import it.uniroma3.siw.taskmanager.repository.TagRepository;
 
+@Service
 public class TagService {
 	
 	
@@ -33,11 +35,11 @@ public class TagService {
 		this.tagRepository.delete(tag);
 	}
 
-	@Transactional
-	public Tag retrieveTagByName(String name) {
-		return this.tagRepository.findbyName(name);
-	}
-	
+//	@Transactional
+//	public Tag retrieveTagByName(String name) {
+//		return this.tagRepository.findbyName(name);
+//	}
+//	
 	
 	
 	

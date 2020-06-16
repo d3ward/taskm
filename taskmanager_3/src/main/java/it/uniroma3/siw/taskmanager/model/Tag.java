@@ -30,6 +30,9 @@ public class Tag {
      */
     @ManyToOne
     private Project project;
+    
+    @ManyToOne
+    private Task task;
     /**
      * Description for this task
      */
@@ -42,10 +45,7 @@ public class Tag {
     @Column
     public String description;
     
-    /*
-	@ManyToMany
-	private List<ProjectTag> tags;	//Lista di tag del task
-	*/
+    
 
     /**
      * Timestamp for the instant this Task was created/loaded into the DB
