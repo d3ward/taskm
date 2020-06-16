@@ -35,6 +35,9 @@ public class Task {
      */
     @Column
     private String description;
+    
+    @Column
+    private String assignedTo;
 
     /**
      * Boolean flag specifying whether this Task is completed or not
@@ -106,6 +109,7 @@ public class Task {
     public void setName(String name) {
         this.name = name;
     }
+    
 
     public String getDescription() {
         return description;
@@ -121,6 +125,13 @@ public class Task {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+    public String getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(String username) {
+        this.assignedTo = username;
     }
 
     public LocalDateTime getCreationTimestamp() {

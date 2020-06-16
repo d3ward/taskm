@@ -70,6 +70,7 @@
 					<th scope="col">#</th>
 					<th scope="col">Nome</th>
 					<th scope="col">Descrizione</th>
+					<th scope="col">Assegnato a</th>
 					<th scope="col" th:if="${canEdit} == true ">Actions</th>
 				</tr>
 			</thead>
@@ -85,6 +86,7 @@
 							class="far fa-check-square" style="font-size: 30px;"></i></a></th>
 					<td th:text="${task.name}"></td>
 					<td th:text="${task.description}" class="text-secondary"></td>
+					<td th:text="${task.assignedTo}" class="text-secondary"></td>
 					<td th:if="${canEdit} == true "><a
 						th:href="'/project/'+ ${project.id}+'/editTask/' + ${task.id}"
 						class="btn bg-success text-white" type="submit"> <i
@@ -113,8 +115,8 @@
 
 				</div>
 				<div class="input-group col-md-3 col-sm-5 ">
-					<select class="custom-select mb-3">
-						<option selected>Myself</option>
+					<select class="custom-select mb-3" name="assignedTo">
+						<option selected th:text="${loggedUser.firstName} + ' ' +${loggedUser.lastName} "></option>
 						<option th:each="member : ${members}"
 							th:text="${member.firstName} + ' ' + ${member.lastName}">
 						</option>

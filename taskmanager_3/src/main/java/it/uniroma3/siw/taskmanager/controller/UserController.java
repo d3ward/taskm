@@ -4,9 +4,12 @@ import it.uniroma3.siw.taskmanager.controller.session.SessionData;
 import it.uniroma3.siw.taskmanager.controller.validation.CredentialsValidator;
 import it.uniroma3.siw.taskmanager.controller.validation.UserValidator;
 import it.uniroma3.siw.taskmanager.model.Credentials;
+
 import it.uniroma3.siw.taskmanager.model.User;
+import it.uniroma3.siw.taskmanager.model.Project;
 import it.uniroma3.siw.taskmanager.repository.UserRepository;
 import it.uniroma3.siw.taskmanager.service.CredentialsService;
+import it.uniroma3.siw.taskmanager.service.ProjectService;
 
 import java.util.List;
 
@@ -42,6 +45,9 @@ public class UserController {
 
 	@Autowired
 	CredentialsService credentialsService;
+	
+	@Autowired
+	ProjectService projectService;
 
 	@Autowired
 	SessionData sessionData;
@@ -57,23 +63,41 @@ public class UserController {
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
 	public String home(Model model) {
 		User loggedUser = sessionData.getLoggedUser();
+		Credentials cred = sessionData.getLoggedCredentials();
 		model.addAttribute("user", loggedUser);
+		model.addAttribute("role", cred.getRole());
 		return "home";
 	}
-	@RequestMapping(value = { "/admin/users" }, method = RequestMethod.GET)
-	public String usersList(Model model) {
+	/**
+	 * This method is called when a GET request is sent by the user to URL
+	 * "/users/user_id". This method prepares and dispatches the User registration
+	 * view.
+	 *
+	 * @param model the Request model
+	 * @return the name of the target view, that in this case is "register"
+	 */
+	@RequestMapping(value = { "/admin" }, method = RequestMethod.GET)
+	public String admin(Model model) {
 		User loggedUser = sessionData.getLoggedUser();
 		List<Credentials> allCredentials =this.credentialsService.getAllCredentials();
 		
+		List<Project> projectsList = this.projectService.retrieveAllProjects();
 		model.addAttribute("loggedUser",loggedUser);
 		model.addAttribute("credentialsList",allCredentials);
-		
-		return "allUsers";
+		model.addAttribute("projectsList",projectsList);
+		return "admin";
 	}
+	
 	@RequestMapping(value = { "/admin/users/{username}/delete" }, method = RequestMethod.POST)
 	public String removeUser(Model model, @PathVariable String username) {
 		this.credentialsService.deleteCredentials(username);
-		return "redirect:/admin/users";
+		return "redirect:/admin";
+	}
+	@RequestMapping(value = { "/admin/projects/{id}/delete" }, method = RequestMethod.POST)
+	public String removeProject(Model model, @PathVariable Long id) {
+		Project project= this.projectService.getProject(id);
+		this.projectService.deleteProject(project);
+		return "redirect:/admin";
 	}
 	
 	/**
@@ -136,19 +160,6 @@ public class UserController {
 		return "updateProfile";
 	}
 
-	/**
-	 * This method is called when a GET request is sent by the user to URL
-	 * "/users/user_id". This method prepares and dispatches the User registration
-	 * view.
-	 *
-	 * @param model the Request model
-	 * @return the name of the target view, that in this case is "register"
-	 */
-	@RequestMapping(value = { "/admin" }, method = RequestMethod.GET)
-	public String admin(Model model) {
-		User loggedUser = sessionData.getLoggedUser();
-		model.addAttribute("user", loggedUser);
-		return "admin";
-	}
+	
 
 }
