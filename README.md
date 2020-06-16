@@ -52,10 +52,10 @@ Progetto SIW 2020 - Task Manager
 
 ### Casi d'uso: Task
 
-- [ ] Aggiungere un nuovo Task a un mio progetto
-- [ ] Aggiornare un Task di un mio progetto
-- [ ] Cancellare un Task da un mio progetto
-- [ ] Assegnare un Task di un mio progetto ad un utente che ha visibilità sul mio progetto
+- [x] Aggiungere un nuovo Task a un mio progetto
+- [x] Aggiornare un Task di un mio progetto
+- [x] Cancellare un Task da un mio progetto
+- [x] Assegnare un Task di un mio progetto ad un utente che ha visibilità sul mio progetto
 - [ ] Aggiungere un Tag ad un task di un mio progetto (estensione)
 - [ ] Aggiungere un Commento ad un Task di un progetto su cui ho visibilità (estensione)
 
