@@ -37,7 +37,35 @@
 			</form>
 			<div class="float-left bg-secondary">
 			<span th:each="tag : ${tags}" th:text="${tag.name}" class="badge badge-primary">Primary</span>
+			
 			</div>
+			<form th:if="${canEdit} == true "
+				th:action="@{'/project/'+ ${project.id} + '/addTag'}" method="POST" name="tagForm">
+				<div class="row">
+				<div class="input-group col-md-2 col-sm-5">
+					<input type="text" class="form-control" placeholder="NAME"
+						name="name">
+				</div>
+
+				<div class="input-group col-md-3 col-sm-5 ">
+					<input type="text" class="form-control" placeholder="DESCRIPTION"
+						name="description">
+				</div>
+				<div class="input-group col-md-3 col-sm-5 ">
+					<input type="color" class="form-control"
+						name="color">
+				</div>
+				<div class="input-group col-md-3 col-sm-5 ">
+					
+				</div>
+				<div class="input-group col-md-3 col-sm-5 ">
+					<button class="btn btn-primary" type="submit">
+						<i class="fas fa-plus"></i>
+					</button>
+				</div>
+
+			</div>
+			</form>
 			
 			
 		</div>

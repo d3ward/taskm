@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.uniroma3.siw.taskmanager.model.Credentials;
 import it.uniroma3.siw.taskmanager.model.Tag;
 import it.uniroma3.siw.taskmanager.repository.TagRepository;
 
@@ -35,11 +36,12 @@ public class TagService {
 		this.tagRepository.delete(tag);
 	}
 
-//	@Transactional
-//	public Tag retrieveTagByName(String name) {
-//		return this.tagRepository.findbyName(name);
-//	}
-//	
+	
+	 @Transactional
+	    public Tag getTag(String name) {
+	        Optional<Tag> result = this.tagRepository.findByName(name);
+	        return result.orElse(null);
+	    }
 	
 	
 	

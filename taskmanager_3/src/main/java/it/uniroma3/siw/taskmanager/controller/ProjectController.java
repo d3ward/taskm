@@ -24,6 +24,7 @@ import it.uniroma3.siw.taskmanager.model.Task;
 import it.uniroma3.siw.taskmanager.model.User;
 import it.uniroma3.siw.taskmanager.service.CredentialsService;
 import it.uniroma3.siw.taskmanager.service.ProjectService;
+import it.uniroma3.siw.taskmanager.service.TagService;
 import it.uniroma3.siw.taskmanager.service.TaskService;
 import it.uniroma3.siw.taskmanager.service.UserService;
 
@@ -32,6 +33,9 @@ public class ProjectController {
 
 	@Autowired
 	ProjectService projectService;
+	
+	@Autowired
+	TagService tagService;
 
 	@Autowired
 	TaskService taskService;
@@ -222,6 +226,19 @@ public class ProjectController {
 		return "updateProject";
 	}
 	
+	
+	@RequestMapping(value = { "/project/{id}/addTag" }, method = RequestMethod.POST)
+	public String tagProject(@Valid @ModelAttribute("tagForm") Tag tagForm, @PathVariable Long id) {
+		
+		Project project = projectService.getProject(id);
+		project.addTag(tagForm);
+		this.tagService.saveTag(tagForm);
+		
+		
+			
+		
+		return "redirect:/project" + id;
+	}
 	
 
 	
