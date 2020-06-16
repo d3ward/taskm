@@ -42,13 +42,11 @@ public class Project {
     @ManyToOne(fetch = FetchType.EAGER)
     private User owner;
  
-    
-    /**
-     * lista tag del progetto
-     */
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name= "project_id")  
-    private List<Tag> tags;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany
+    @JoinColumn(name="project_id")
+    private List<Tag> tags;	
+   
     
     /**
      * Name for this Project
@@ -116,14 +114,16 @@ public class Project {
         return members;
     }
     
+    public List<Tag> getTags() {
+        return tags;
+    }
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
     public void addTag(Tag tag) {
     	this.tags.add(tag);
     }
     
-    public List<Tag> getTags() {
-    	return tags;
-    }
-
     public void setMembers(List<User> members) {
         this.members = members;
     }

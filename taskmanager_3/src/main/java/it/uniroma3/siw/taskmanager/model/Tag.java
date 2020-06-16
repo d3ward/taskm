@@ -28,7 +28,7 @@ public class Tag {
     /**
      * Project for this task
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Project project;
     
     @ManyToOne

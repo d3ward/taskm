@@ -231,13 +231,10 @@ public class ProjectController {
 	public String tagProject(@Valid @ModelAttribute("tagForm") Tag tagForm, @PathVariable Long id) {
 		
 		Project project = projectService.getProject(id);
-		project.addTag(tagForm);
+		//project.addTag(tagForm);
+		tagForm.setProject(project);
 		this.tagService.saveTag(tagForm);
-		
-		
-			
-		
-		return "redirect:/project" + id;
+		return "redirect:/project/" + id;
 	}
 	
 

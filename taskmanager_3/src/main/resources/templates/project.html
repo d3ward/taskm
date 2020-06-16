@@ -5,7 +5,11 @@
 <head
 	th:replace="fragments/base.html :: headerfiles(title='TaskM - Project Overview ')">
 </head>
-
+<style>
+.badge {
+	font-size: 20px !important;
+}
+</style>
 <body>
 
 	<div class="container mt-4">
@@ -16,12 +20,20 @@
 			<h4 th:text="${owner}" th:if="${canEdit} == false "></h4>
 			<h4 th:if="${canEdit} ==  true ">Tu sei il proprietario di
 				questo progetto</h4>
+			<div>
+				<span th:each="tag : ${tags}" th:text="${tag.name}"
+					class="badge m-1 text-white"
+					th:style="'background-color:'+${tag.color}">Primary</span>
+
+			</div>
+			
+			
 			<form th:if="${canEdit} == true "
 				th:action="@{'/project/' + ${project.id} + '/delete'}" method="POST"
 				class="float-right m-1">
 				<div class="form-group">
 					<button class="btn bg-danger text-white" type="submit">
-						<i class="far fa-trash-alt"></i> Delete
+						<i class="far fa-trash-alt"></i> Delete Project
 					</button>
 				</div>
 			</form>
@@ -35,41 +47,33 @@
 				</div>
 
 			</form>
-			<div class="float-left bg-secondary">
-			<span th:each="tag : ${tags}" th:text="${tag.name}" class="badge badge-primary">Primary</span>
-			
-			</div>
-			<form th:if="${canEdit} == true "
-				th:action="@{'/project/'+ ${project.id} + '/addTag'}" method="POST" name="tagForm">
-				<div class="row">
-				<div class="input-group col-md-2 col-sm-5">
+		</div>
+
+		<form th:if="${canEdit} == true "
+			th:action="@{'/project/'+ ${project.id} + '/addTag'}" method="POST"
+			name="tagForm">
+			<div class="row border m-0 p-3 rounded">
+				<h3><span class="badge bg-primary text-white "> Tags</span></h3>
+				<div class="input-group col-md-2 col-sm-5 m-1">
 					<input type="text" class="form-control" placeholder="NAME"
 						name="name">
 				</div>
 
-				<div class="input-group col-md-3 col-sm-5 ">
+				<div class="input-group col-md-3 col-sm-5 m-1 ">
 					<input type="text" class="form-control" placeholder="DESCRIPTION"
 						name="description">
 				</div>
-				<div class="input-group col-md-3 col-sm-5 ">
-					<input type="color" class="form-control"
-						name="color">
+				<div class="input-group col-md-1 col-sm-4 col-3 m-1">
+					<input type="color" class="form-control p-0" name="color">
 				</div>
-				<div class="input-group col-md-3 col-sm-5 ">
-					
-				</div>
-				<div class="input-group col-md-3 col-sm-5 ">
+				<div class="input-group col-md-3 col-sm-5 col m-1">
 					<button class="btn btn-primary" type="submit">
-						<i class="fas fa-plus"></i>
+						<i class="fas fa-tag"></i> Add Tag
 					</button>
 				</div>
 
 			</div>
-			</form>
-			
-			
-		</div>
-
+		</form>
 		<div class="mb-3">
 			<h3>Shared with:</h3>
 			<ul>
@@ -148,7 +152,8 @@
 				</div>
 				<div class="input-group col-md-3 col-sm-5 ">
 					<select class="custom-select mb-3" name="assignedTo">
-						<option selected th:text="${loggedUser.firstName} + ' ' +${loggedUser.lastName} "></option>
+						<option selected
+							th:text="${loggedUser.firstName} + ' ' +${loggedUser.lastName} "></option>
 						<option th:each="member : ${members}"
 							th:text="${member.firstName} + ' ' + ${member.lastName}">
 						</option>
