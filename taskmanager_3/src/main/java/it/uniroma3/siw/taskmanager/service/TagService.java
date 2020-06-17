@@ -30,5 +30,11 @@ public class TagService {
 	public void deleteTag(Tag tag) {
 		this.tagRepository.delete(tag);
 	}
+	@Transactional
+	public Tag retrieveTagByName(String name) {
+		return this.tagRepository.findByName(name);
+	
+	}
+
 
 }

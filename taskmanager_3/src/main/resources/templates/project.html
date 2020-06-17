@@ -20,155 +20,157 @@
 			<h4 th:text="${owner}" th:if="${canEdit} == false "></h4>
 			<h4 th:if="${canEdit} ==  true ">Tu sei il proprietario di
 				questo progetto</h4>
+
 			<div>
+				<a th:if="${canEdit} == true "
+					th:href="@{'/project/' + ${project.id} + '/delete'}"
+					class="btn bg-danger text-white float-right m-1"><i
+					class="far fa-trash-alt"></i> Delete Project</a> <a
+					th:if="${canEdit} == true "
+					th:href="@{'/project/' + ${project.id} + '/edit'}"
+					class="btn bg-success text-white float-right m-1"><i
+					class="far fa-edit"></i> Edit</a>
+			</div>
+		</div>
+		<div class="row border m-0 p-3 rounded shadow">
+			<div class="col-12">
+				<h2>
+					<span class="badge bg-primary text-white p-2"> <i
+						class="fas fa-tags"></i> Tags
+					</span>
+				</h2>
 				<span th:each="tag : ${tags}" th:text="${tag.name}"
-					class="badge m-1 text-white"
+					class="badge m-1 text-white" data-toggle="tooltip"
+					data-placement="top" th:title="${tag.description}"
 					th:style="'background-color:'+${tag.color}">Primary</span>
 
 			</div>
-			
-			
+
 			<form th:if="${canEdit} == true "
-				th:action="@{'/project/' + ${project.id} + '/delete'}" method="POST"
-				class="float-right m-1">
-				<div class="form-group">
-					<button class="btn bg-danger text-white" type="submit">
-						<i class="far fa-trash-alt"></i> Delete Project
-					</button>
-				</div>
-			</form>
-			<form th:if="${canEdit} == true "
-				th:action="@{'/project/' + ${project.id} + '/edit'}" method="POST"
-				class="float-right m-1">
-				<div class="form-group">
-					<button class="btn bg-success text-white" type="submit">
-						<i class="far fa-edit"></i> Edit
-					</button>
+				th:action="@{'/project/'+ ${project.id} + '/addTag'}" method="POST"
+				name="tagForm" class="col-12">
+				<hr>
+				<div class="row">
+					<div class="input-group col-md-4 col-sm-5 m-1">
+						<input type="text" class="form-control" placeholder="Name"
+							name="name">
+					</div>
+
+					<div class="input-group col-md-4 col-sm-5 m-1 ">
+						<input type="text" class="form-control" placeholder="Description"
+							name="description">
+					</div>
+					<div class="input-group col-md-1 col-sm-4 col-3 m-1">
+						<input type="color" class="form-control p-0" name="color">
+					</div>
+					<div class="input-group col-md-2 col-sm-5 col m-1">
+						<button class="btn btn-primary" type="submit">
+							<i class="fas fa-tag"></i> Add Tag
+						</button>
+					</div>
 				</div>
 
 			</form>
+
 		</div>
 
-		<form th:if="${canEdit} == true "
-			th:action="@{'/project/'+ ${project.id} + '/addTag'}" method="POST"
-			name="tagForm">
-			<div class="row border m-0 p-3 rounded">
-				<h3><span class="badge bg-primary text-white "> Tags</span></h3>
-				<div class="input-group col-md-2 col-sm-5 m-1">
-					<input type="text" class="form-control" placeholder="NAME"
-						name="name">
-				</div>
-
-				<div class="input-group col-md-3 col-sm-5 m-1 ">
-					<input type="text" class="form-control" placeholder="DESCRIPTION"
-						name="description">
-				</div>
-				<div class="input-group col-md-1 col-sm-4 col-3 m-1">
-					<input type="color" class="form-control p-0" name="color">
-				</div>
-				<div class="input-group col-md-3 col-sm-5 col m-1">
-					<button class="btn btn-primary" type="submit">
-						<i class="fas fa-tag"></i> Add Tag
-					</button>
-				</div>
-
-			</div>
-		</form>
-		<div class="mb-3">
+		<div class="row border m-0 mt-4 p-3 rounded shadow">
 			<h3>Shared with:</h3>
-			<ul>
-				<li th:each="member : ${members}">
-					<div th:text="${member.firstName} + ' ' + ${member.lastName}"></div>
+			<div class="col-12">
+				<ul>
+					<li th:each="member : ${members}">
+						<div th:text="${member.firstName} + ' ' + ${member.lastName}"></div>
+					</li>
 
-				</li>
-
-			</ul>
+				</ul>
+			</div>
 			<form th:if="${canEdit} == true "
 				th:action="@{'/project/'+ ${project.id} + '/share'}" method="POST">
-
-				<div class="row">
-					<div class="input-group  col-md-4 col-sm-8">
-						<input type="text" class="form-control" placeholder="USERNAME"
-							name="username">
-						<div class="input-group-append">
-							<button class="btn btn-primary" type="submit">
-								<i class="far fa-share-square"></i>
-							</button>
-						</div>
+				<hr>
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Username"
+						name="username">
+					<div class="input-group-append">
+						<button class="btn btn-primary" type="submit">
+							<i class="far fa-share-square"></i>
+						</button>
 					</div>
 				</div>
 			</form>
 		</div>
+		<div class="row border m-0 mt-4 p-3 rounded shadow mb-4">
+			<h3>Tasks</h3>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Nome</th>
+						<th scope="col">Descrizione</th>
+						<th scope="col">Assegnato a</th>
+						<th scope="col" th:if="${canEdit} == true ">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="task : ${project.tasks}">
+						<th><a th:if="${task.completed} == false "
+							th:href="'/project/'+ ${project.id}+'/completeTask/' + ${task.id}"
+							class="btn text-primary p-0" type="submit"><i
+								class="far fa-square" style="font-size: 30px;"></i></a> <a
+							th:if="${task.completed} == true "
+							th:href="'/project/'+ ${project.id}+'/completeTask/' + ${task.id}"
+							class="btn text-primary p-0" type="submit"><i
+								class="far fa-check-square" style="font-size: 30px;"></i></a></th>
+						<td th:text="${task.name}"></td>
+						<td th:text="${task.description}" class="text-secondary"></td>
+						<td th:text="${task.assignedTo}" class="text-secondary"></td>
+						<td th:if="${canEdit} == true "><a
+							th:href="'/project/'+${project.id}+ '/editTask/' + ${task.id}"
+							class="btn bg-success text-white" type="submit"> <i
+								class="far fa-edit"></i></a> <a
+							th:href="'/project/'+ ${project.id}+'/deleteTask/' + ${task.id}"
+							class="btn bg-danger text-white" type="submit"><i
+								class="far fa-trash-alt"></i></a></td>
+					</tr>
+				</tbody>
+			</table>
 
-		<h3>Tasks</h3>
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th scope="col">#</th>
-					<th scope="col">Nome</th>
-					<th scope="col">Descrizione</th>
-					<th scope="col">Assegnato a</th>
-					<th scope="col" th:if="${canEdit} == true ">Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="task : ${project.tasks}">
-					<th><a th:if="${task.completed} == false "
-						th:href="'/project/'+ ${project.id}+'/completeTask/' + ${task.id}"
-						class="btn text-primary p-0" type="submit"><i
-							class="far fa-square" style="font-size: 30px;"></i></a> <a
-						th:if="${task.completed} == true "
-						th:href="'/project/'+ ${project.id}+'/completeTask/' + ${task.id}"
-						class="btn text-primary p-0" type="submit"><i
-							class="far fa-check-square" style="font-size: 30px;"></i></a></th>
-					<td th:text="${task.name}"></td>
-					<td th:text="${task.description}" class="text-secondary"></td>
-					<td th:text="${task.assignedTo}" class="text-secondary"></td>
-					<td th:if="${canEdit} == true "><a
-						th:href="'/project/'+${project.id}+ '/editTask/' + ${task.id}"
-						class="btn bg-success text-white" type="submit"> <i
-							class="far fa-edit"></i></a> <a
-						th:href="'/project/'+ ${project.id}+'/deleteTask/' + ${task.id}"
-						class="btn bg-danger text-white" type="submit"><i
-							class="far fa-trash-alt"></i></a></td>
-				</tr>
-			</tbody>
-		</table>
-
-
-		<form name="taskForm" th:if="${canEdit} == true "
-			th:action="@{'/project/'+ ${project.id} + '/task'}" method="POST">
-			<div class="row">
-
-
-				<div class="input-group col-md-2 col-sm-5">
-					<input type="text" class="form-control" placeholder="NAME"
-						name="name">
+			<div class="col-12">
+			<form name="taskForm" th:if="${canEdit} == true "
+				th:action="@{'/project/'+ ${project.id} + '/task'}" method="POST">
+				<hr>
+				<div class="row">
+					<div class="input-group col-md-3 col-sm-5">
+						<input type="text" class="form-control" placeholder="Name"
+							name="name">
+					</div>
+					<div class="input-group col-md-3 col-sm-5 ">
+						<input type="text" class="form-control" placeholder="Description"
+							name="description">
+					</div>
+					<div class="input-group col-md-3 col-sm-5 ">
+						<select class="custom-select" name="assignedTo">
+							<option selected
+								th:text="${loggedUser.firstName} + ' ' +${loggedUser.lastName} "></option>
+							<option th:each="member : ${members}"
+								th:text="${member.firstName} + ' ' + ${member.lastName}">
+							</option>
+						</select>
+					</div>
+					<div class="input-group col-md-3 col-sm-5 ">
+						<button class="btn btn-primary" type="submit">
+							<i class="fas fa-plus"></i> New task
+						</button>
+					</div>
 				</div>
-
-				<div class="input-group col-md-3 col-sm-5 ">
-					<input type="text" class="form-control" placeholder="DESCRIPTION"
-						name="description">
-				</div>
-				<div class="input-group col-md-3 col-sm-5 ">
-					<select class="custom-select mb-3" name="assignedTo">
-						<option selected
-							th:text="${loggedUser.firstName} + ' ' +${loggedUser.lastName} "></option>
-						<option th:each="member : ${members}"
-							th:text="${member.firstName} + ' ' + ${member.lastName}">
-						</option>
-					</select>
-				</div>
-				<div class="input-group col-md-3 col-sm-5 ">
-					<button class="btn btn-primary" type="submit">
-						<i class="fas fa-plus"></i>
-					</button>
-				</div>
-
+			</form>
 			</div>
-		</form>
-
+		</div>
 	</div>
 
 </body>
+<script>
+	$(function() {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+</script>
 </html>

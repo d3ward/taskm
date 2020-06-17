@@ -27,8 +27,7 @@ public class TaskmanagerApplication {
 	@Bean
 	public InitializingBean populateDatabaseIfEmpty() {
 	    return () -> {
-	        // Users
-	    	
+	        // Add Admin Credentials
 	    	User user=new User("Eduard","Ursu");
 	        Credentials cred = new Credentials();
 	        cred.setUser(user);

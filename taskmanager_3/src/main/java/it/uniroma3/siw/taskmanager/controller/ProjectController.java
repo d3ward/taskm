@@ -129,7 +129,7 @@ public class ProjectController {
 		return "redirect:/home";
 	}
 
-	@RequestMapping(value = { "/project/{id}/delete" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "/project/{id}/delete" }, method = RequestMethod.GET)
 	public String deleteProject(@PathVariable Long id) {
 
 		Project project = projectService.getProject(id);
@@ -153,7 +153,7 @@ public class ProjectController {
 		return "redirect:/project/" + idP;
 	}
 
-	@RequestMapping(value = { "/project/{id}/edit" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "/project/{id}/edit" }, method = RequestMethod.GET)
 	public String updateProject(Model model, @PathVariable Long id) {
 		Project project = this.projectService.getProject(id);
 		model.addAttribute("projectForm", project);
@@ -231,12 +231,25 @@ public class ProjectController {
 	public String tagProject(@Valid @ModelAttribute("tagForm") Tag tagForm, @PathVariable Long id) {
 		
 		Project project = projectService.getProject(id);
-		//project.addTag(tagForm);
-		tagForm.setProject(project);
-		this.tagService.saveTag(tagForm);
+		
+		Tag tag= this.tagService.retrieveTagByName(tagForm.getName());
+		
+		if(tag!=null) tagForm=tag;
+		project.addTag(tagForm);
+		this.projectService.saveProject(project);
 		return "redirect:/project/" + id;
 	}
 	
+	@RequestMapping(value = { "/project/{id}/taskTag" }, method = RequestMethod.POST)
+	public String tagTask(@Valid @ModelAttribute("tagForm") Tag tagForm, @PathVariable Long id) {
+		
+		Project project = projectService.getProject(id);
+		
+		tagForm.addProject(project);
+		project.addTag(tagForm);
+		this.projectService.saveProject(project);
+		return "redirect:/project/" + id;
+	}
 
 	
 

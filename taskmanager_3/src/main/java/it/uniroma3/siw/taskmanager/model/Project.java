@@ -2,162 +2,167 @@ package it.uniroma3.siw.taskmanager.model;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * A Project is an activity managed by the TaskManager.
- * It is generated and owned by a specific User, that can grant visibility over it to multiple other ones.
- * It can contain one or multiple individual Tasks.
+ * A Project is an activity managed by the TaskManager. It is generated and
+ * owned by a specific User, that can grant visibility over it to multiple other
+ * ones. It can contain one or multiple individual Tasks.
  */
 @Entity
 public class Project {
 
-    /**
-     * Unique identifier for this Project
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	/**
+	 * Unique identifier for this Project
+	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    /**
-     * Name for this Project
-     */
-    @Column(nullable = false, length = 100)
-    private String name;
+	/**
+	 * Name for this Project
+	 */
+	@Column(nullable = false, length = 100)
+	private String name;
 
-    /**
-     * Description for this Project
-     */
-    @Column
-    private String description;
+	/**
+	 * Description for this Project
+	 */
+	@Column
+	private String description;
 
-    /**
-     * Name for this Project
-     */
-    @ManyToOne(fetch = FetchType.EAGER)
-    private User owner;
- 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany
-    @JoinColumn(name="project_id")
-    private List<Tag> tags;	
-   
-    
-    /**
-     * Name for this Project
-     */
-    @ManyToMany(fetch = FetchType.LAZY)                                // fetch is LAZY by default
-    private List<User> members;
+	/**
+	 * User owner for this Project
+	 */
+	@ManyToOne(fetch = FetchType.EAGER)
+	private User owner;
 
-    /**
-     * Tasks that this project contains
-     */
-    @OneToMany(fetch = FetchType.EAGER,        // whenever a Project is retrieved, always retrieve its tasks too
-            cascade = CascadeType.REMOVE)   // if a Project is deleted, all its tasks must be deleted too
-    @JoinColumn(name="project_id")
-    private List<Task> tasks;
+	/**
+	 * List of members that collaborate on this Project
+	 */
+	@ManyToMany(fetch = FetchType.LAZY) // fetch is LAZY by default
+	private List<User> members;
 
-    public Project() {
-        this.members = new ArrayList<>();
-        this.tasks = new ArrayList<>();
-    }
+	/**
+	 * Tasks that this project contains
+	 */
+	@OneToMany(fetch = FetchType.EAGER, // whenever a Project is retrieved, always retrieve its tasks too
+			cascade = CascadeType.REMOVE) // if a Project is deleted, all its tasks must be deleted too
+	@JoinColumn(name = "project_id")
+	private List<Task> tasks;
 
-    public Project(String name, String description) {
-        this();
-        this.name = name;
-        this.description = description;
-    }
+	
+	/**
+	 * Tags that this project contains
+	 */
+	@ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.MERGE
+            })
+    @JoinTable(name = "project_tags",
+            joinColumns = { @JoinColumn(name = "project_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tag_id") })
+	private List<Tag> tags;
 
-    public void addMember(User user) {
-        if (!this.members.contains(user))
-            this.members.add(user);
-    }
+	public Project() {
+		this.members = new ArrayList<>();
+		this.tasks = new ArrayList<>();
+		this.tags = new ArrayList<>();
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Project(String name, String description) {
+		this();
+		this.name = name;
+		this.description = description;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void addMember(User user) {
+		if (!this.members.contains(user))
+			this.members.add(user);
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public User getOwner() {
-        return owner;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public List<User> getMembers() {
-        return members;
-    }
-    
-    public List<Tag> getTags() {
-        return tags;
-    }
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
-    public void addTag(Tag tag) {
-    	this.tags.add(tag);
-    }
-    
-    public void setMembers(List<User> members) {
-        this.members = members;
-    }
+	public User getOwner() {
+		return owner;
+	}
 
-    public List<Task> getTasks() {
-        return tasks;
-    }
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-    
-    @Override
-    public String toString() {
+	public List<User> getMembers() {
+		return members;
+	}
 
-        return "Project{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", tasks=" + tasks +
-                '}';
-    }
+	public void setMembers(List<User> members) {
+		this.members = members;
+	}
 
-    // this is a semplification
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Project project = (Project) o;
-        return Objects.equals(name, project.name);
-    }
+	public List<Tag> getTags() {
+		return tags;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
+	public void addTag(Tag tag) {
+		this.tags.add(tag);
+	}
+
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
+	}
+
+	@Override
+	public String toString() {
+
+		return "Project{" + "id=" + id + ", name='" + name + '\'' + ", description='" + description + '\'' + ", tasks="
+				+ tasks + '}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Project project = (Project) o;
+		return Objects.equals(name, project.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
 }

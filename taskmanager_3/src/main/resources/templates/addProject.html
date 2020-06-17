@@ -7,34 +7,42 @@
 </head>
 
 <body>
-	
-	<div class="container text-center mt-4">
-	<navbar th:replace="fragments/base.html :: navbar"></navbar>
+
+	<div class="container mt-4">
+		<navbar th:replace="fragments/base.html :: navbar"></navbar>
 		<div class="row justify-content-center mt-4">
 			<form id="projectForm" th:action="@{/projects/add}"
 				th:object="${projectForm}" method="POST"
-				class="shadow p-3 m-2 mx-auto rounded " autocomplete="off">
+				class="shadow p-3 m-2 mx-auto rounded border col-10 col-md-6 col-sm- " autocomplete="off">
 				<h1>Create new Project</h1>
+				<hr>
 				<div class="form-group ">
 					<label for="projectName">Project Name</label> <input
-						class="form-control" id=projectName type="text" th:field="*{name}"
-						placeholder="NAME" /> <small class="form-text text-muted"
-						th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-						th:style="'color:red'"></small>
+						class="form-control" type="text" th:field="*{name}"
+						placeholder="Name" oninput="clearError(1)" />
+					<div id="error1" th:if="${#fields.hasErrors('name')}"
+						class="alert bg-danger text-white mt-2" th:errors="*{name}"></div>
 				</div>
 				<div class="form-group ">
 					<label for="projectDescription">Description</label> <input
-						class="form-control" id="projectDescription" type="text"
-						th:field="*{description}" placeholder="Description" /> <small
-						class="form-text text-muted"
-						th:if="${#fields.hasErrors('description')}"
-						th:errors="*{description}" th:style="'color:red'"></small>
+						class="form-control" type="text"
+						th:field="*{description}" placeholder="Description"
+						oninput="clearError(2)" />
+					<div id="error2" th:if="${#fields.hasErrors('description')}"
+						class="alert bg-danger text-white mt-2" th:errors="*{description}"></div>
 				</div>
 
 				<div class="form-group">
-					<button type="submit" class="btn btn-primary">Create</button>
+					<button type="submit" class="btn btn-primary float-right">Create</button>
 				</div>
 			</form>
 		</div>
 </body>
+<script>
+	function clearError(t) {
+		var errorMessage = document.getElementById("error" + t);
+		if (errorMessage)
+			errorMessage.parentElement.removeChild(errorMessage);
+	}
+</script>
 </html>

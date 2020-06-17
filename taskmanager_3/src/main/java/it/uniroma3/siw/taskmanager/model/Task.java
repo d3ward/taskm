@@ -46,9 +46,8 @@ public class Task {
     @Column(nullable = false)
     private boolean completed;
     
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name= "task_id")  
-    private List<Tag> tags;
+    @ManyToMany(mappedBy = "tasks", fetch = FetchType.EAGER)
+    private List<Tag> tags;   //Lista di tag del task
 
     /**
      * Timestamp for the instant this Task was created/loaded into the DB
@@ -149,6 +148,13 @@ public class Task {
     public void setLastUpdateTimestamp(LocalDateTime lastUpdateTimestamp) {
         this.lastUpdateTimestamp = lastUpdateTimestamp;
     }
+    public List<Tag> getTags() {
+  		return tags;
+  	}
+
+  	public void setTags(List<Tag> tags) {
+  		this.tags = tags;
+  	}
 
     @Override
     public boolean equals(Object o) {
