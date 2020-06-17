@@ -48,7 +48,7 @@ Progetto SIW 2020 - Task Manager
 - [x] Aggiornare i dati di un mio progetto
 - [x] Cancellare un mio progetto
 - [x] Condividere un mio progetto con un altro utente
-- [ ] Aggiungere un tag ad un mio progetto (estensione)
+- [x] Aggiungere un tag ad un mio progetto (estensione)
 
 ### Casi d'uso: Task
 
@@ -56,6 +56,6 @@ Progetto SIW 2020 - Task Manager
 - [x] Aggiornare un Task di un mio progetto
 - [x] Cancellare un Task da un mio progetto
 - [x] Assegnare un Task di un mio progetto ad un utente che ha visibilità sul mio progetto
-- [ ] Aggiungere un Tag ad un task di un mio progetto (estensione)
+- [x] Aggiungere un Tag ad un task di un mio progetto (estensione)
 - [ ] Aggiungere un Commento ad un Task di un progetto su cui ho visibilità (estensione)
 
