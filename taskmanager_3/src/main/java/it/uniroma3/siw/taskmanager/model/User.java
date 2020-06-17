@@ -48,6 +48,9 @@ public class User {
     @ManyToMany(mappedBy = "members")
     private List<Project> visibleProjects;
 
+    @OneToMany
+    private List<Task> task;
+    
     /**
      * The date that this User was created/loaded into the DB
      */

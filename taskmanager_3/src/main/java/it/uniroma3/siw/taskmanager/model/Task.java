@@ -37,7 +37,10 @@ public class Task {
 	@Column
 	private String description;
 
-	private String assignedTo;
+	@ManyToOne
+	private User assignedTo;
+	
+	
 
 	/**
 	 * Boolean flag specifying whether this Task is completed or not
@@ -126,11 +129,11 @@ public class Task {
 		this.completed = completed;
 	}
 
-	public String getAssignedTo() {
+	public User getAssignedTo() {
 		return assignedTo;
 	}
 
-	public void setAssignedTo(String username) {
+	public void setAssignedTo(User username) {
 		this.assignedTo = username;
 	}
 

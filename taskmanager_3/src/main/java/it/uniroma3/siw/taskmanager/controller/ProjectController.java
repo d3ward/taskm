@@ -179,11 +179,11 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = { "/project/{id}/task" }, method = RequestMethod.POST)
-	public String newTask(@Valid @ModelAttribute("taskForm") Task task, @PathVariable Long id,
+	public String newTask(@Valid @ModelAttribute("taskForm") Task task,@RequestParam("assignId") Long assignId, @PathVariable Long id,
 			BindingResult taskBindingResult) {
 
 		Project project = this.projectService.getProject(id);
-		
+		task.setAssignedTo(this.userService.getUser(assignId));
 		
 		if (!taskBindingResult.hasErrors()) {
 			task.setProject(project);

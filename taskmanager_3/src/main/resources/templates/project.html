@@ -146,7 +146,7 @@
 								class="far fa-check-square" style="font-size: 30px;"></i></a></th>
 						<td th:text="${task.name}"></td>
 						<td th:text="${task.description}" class="text-secondary"></td>
-						<td th:text="${task.assignedTo}" class="text-secondary"></td>
+						<td th:text="${task.assignedTo.firstName} + ${task.assignedTo.lastName}" class="text-secondary"></td>
 						<td class="text-secondary"><span th:each="tag : ${task.tags}"
 							class="badge m-1 text-white bdg"
 							th:style="'background-color:'+${tag.color}" th:text="${tag.name}"></span></td>
@@ -175,10 +175,10 @@
 								name="description">
 						</div>
 						<div class="input-group col-md-3 col-sm-5 ">
-							<select class="custom-select" name="assignedTo">
-								<option selected
+							<select class="custom-select" name="assignId">
+								<option selected th:value="${loggedUser.id}"
 									th:text="${loggedUser.firstName} + ' ' +${loggedUser.lastName} "></option>
-								<option th:each="member : ${members}"
+								<option  th:each="member : ${members} " th:value="${member.id}"
 									th:text="${member.firstName} + ' ' + ${member.lastName}">
 								</option>
 							</select>

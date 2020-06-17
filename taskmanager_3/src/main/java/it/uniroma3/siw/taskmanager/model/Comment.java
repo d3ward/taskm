@@ -4,6 +4,10 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,27 +35,23 @@ public class Comment {
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User owner;
-
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional= false )
+	@JoinColumn(name="task_id",nullable=false)
+	@OnDelete(action=OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private Task task;
 	
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "project_id", nullable = false)
-    private Project project;
-
-	/**
-	 * Tags that this project contains
-	 */
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany
-	@JoinColumn(name = "project_id")
-	private List<Tag> tags;
-
 	public Comment() {
-		this.tags = new ArrayList<>();
-	}
+		
+	};
 
-	public Comment(String name, String description) {
+	
+	public Comment(String content, User owner) {
 		this();
+		this.content = content;
+		this.owner = owner;
 	}
 
 
@@ -77,27 +77,6 @@ public class Comment {
 
 	public void setOwner(User owner) {
 		this.owner = owner;
-	}
-
-
-	public List<Tag> getTags() {
-		return tags;
-	}
-
-	public void setTags(List<Tag> tags) {
-		this.tags = tags;
-	}
-
-	public void addTag(Tag tag) {
-		this.tags.add(tag);
-	}
-
-
-	@Override
-	public String toString() {
-
-		return "Comment{" + "id=" + id + ",  content='" + content + '\'' + ", project="
-				+ project + '}';
 	}
 
 	
