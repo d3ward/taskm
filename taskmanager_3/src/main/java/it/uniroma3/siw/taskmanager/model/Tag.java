@@ -1,8 +1,17 @@
 package it.uniroma3.siw.taskmanager.model;
 
-import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 /**
  * A Tag is a unitary tag managed by the TaskManager.
@@ -33,13 +42,9 @@ public class Tag {
 	@Column()
 	public String color;
 
-	@ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-            },
-            mappedBy = "tags")
-	private List<Project> projects;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", nullable = false)
+	private Project project;
 
 	@ManyToMany
 	private List<Task> tasks;
@@ -95,14 +100,14 @@ public class Tag {
 		this.tasks = tasks;
 	}
 
-	public List<Project> getProject() {
-		return projects;
+	public Project getProject() {
+		return project;
 	}
 	public void addProject(Project project) {
-		projects.add(project);
+		this.project=project;
 	}
-	public void setProject(List<Project> projects) {
-		this.projects = projects;
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	@Override

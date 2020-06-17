@@ -37,8 +37,9 @@ public class Task {
     @Column
     private String description;
     
-    @Column
+   
     private String assignedTo;
+   
 
     /**
      * Boolean flag specifying whether this Task is completed or not

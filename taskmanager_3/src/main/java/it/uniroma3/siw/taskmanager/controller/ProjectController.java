@@ -233,12 +233,26 @@ public class ProjectController {
 		Project project = projectService.getProject(id);
 		
 		Tag tag= this.tagService.retrieveTagByName(tagForm.getName());
-		
 		if(tag!=null) tagForm=tag;
+		
+		tagForm.addProject(project);
 		project.addTag(tagForm);
 		this.projectService.saveProject(project);
 		return "redirect:/project/" + id;
 	}
+	
+	@RequestMapping(value = { "/project/{id}/deleteTag/{tagid}" }, method = RequestMethod.GET)
+	public String deletaTag( @PathVariable Long id ,@PathVariable Long tagid) {
+		
+		Tag tag= this.tagService.getTag(tagid);
+		
+		this.tagService.deleteTag(tag);
+		
+		return "redirect:/project/" + id;
+	}
+	
+	
+	
 	
 	@RequestMapping(value = { "/project/{id}/taskTag" }, method = RequestMethod.POST)
 	public String tagTask(@Valid @ModelAttribute("tagForm") Tag tagForm, @PathVariable Long id) {

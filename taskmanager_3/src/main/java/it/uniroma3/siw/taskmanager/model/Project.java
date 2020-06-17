@@ -57,14 +57,9 @@ public class Project {
 	/**
 	 * Tags that this project contains
 	 */
-	@ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-            })
-    @JoinTable(name = "project_tags",
-            joinColumns = { @JoinColumn(name = "project_id") },
-            inverseJoinColumns = { @JoinColumn(name = "tag_id") })
+	@OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "project")
 	private List<Tag> tags;
 
 	public Project() {

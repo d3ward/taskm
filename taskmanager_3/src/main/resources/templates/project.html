@@ -5,9 +5,29 @@
 <head
 	th:replace="fragments/base.html :: headerfiles(title='TaskM - Project Overview ')">
 </head>
+<link
+	href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css"
+	rel="stylesheet" type="text/css" />
+<script
+	src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"
+	type="text/javascript"></script>
 <style>
 .badge {
 	font-size: 20px !important;
+}
+
+.bdg>a {
+	color: white;
+	opacity: 0;
+}
+
+.btn-group {
+	border: 1px solid #ced4da;
+	border-radius: .25rem;
+}
+
+.bdg:hover>a {
+	opacity: 1;
 }
 </style>
 <body>
@@ -39,10 +59,13 @@
 						class="fas fa-tags"></i> Tags
 					</span>
 				</h2>
-				<span th:each="tag : ${tags}" th:text="${tag.name}"
-					class="badge m-1 text-white" data-toggle="tooltip"
-					data-placement="top" th:title="${tag.description}"
-					th:style="'background-color:'+${tag.color}">Primary</span>
+				<span th:each="tag : ${tags}" class="badge m-1 text-white bdg"
+					data-toggle="tooltip" data-placement="top"
+					th:title="${tag.description}"
+					th:style="'background-color:'+${tag.color}"><span
+					th:text="${tag.name}"></span> <a
+					th:href="@{'/project/' + ${project.id} + '/deleteTag/' + ${tag.id}}"><i
+						class="fas fa-times"></i></a> </span>
 
 			</div>
 
@@ -107,6 +130,7 @@
 						<th scope="col">Nome</th>
 						<th scope="col">Descrizione</th>
 						<th scope="col">Assegnato a</th>
+						<th scope="col">Tags</th>
 						<th scope="col" th:if="${canEdit} == true ">Actions</th>
 					</tr>
 				</thead>
@@ -123,6 +147,9 @@
 						<td th:text="${task.name}"></td>
 						<td th:text="${task.description}" class="text-secondary"></td>
 						<td th:text="${task.assignedTo}" class="text-secondary"></td>
+						<td class="text-secondary"><span th:each="tag : ${tags}"
+							class="badge m-1 text-white bdg"
+							th:style="'background-color:'+${tag.color}" th:text="${tag.name}"></span></td>
 						<td th:if="${canEdit} == true "><a
 							th:href="'/project/'+${project.id}+ '/editTask/' + ${task.id}"
 							class="btn bg-success text-white" type="submit"> <i
@@ -135,40 +162,54 @@
 			</table>
 
 			<div class="col-12">
-			<form name="taskForm" th:if="${canEdit} == true "
-				th:action="@{'/project/'+ ${project.id} + '/task'}" method="POST">
-				<hr>
-				<div class="row">
-					<div class="input-group col-md-3 col-sm-5">
-						<input type="text" class="form-control" placeholder="Name"
-							name="name">
+				<form name="taskForm" th:if="${canEdit} == true "
+					th:action="@{'/project/'+ ${project.id} + '/task'}" method="POST">
+					<hr>
+					<div class="row">
+						<div class="input-group col-md-2 col-sm-5">
+							<input type="text" class="form-control" placeholder="Name"
+								name="name">
+						</div>
+						<div class="input-group col-md-3 col-sm-5 ">
+							<input type="text" class="form-control" placeholder="Description"
+								name="description">
+						</div>
+						<div class="input-group col-md-3 col-sm-5 ">
+							<select class="custom-select" name="assignedTo">
+								<option selected
+									th:text="${loggedUser.firstName} + ' ' +${loggedUser.lastName} "></option>
+								<option th:each="member : ${members}"
+									th:text="${member.firstName} + ' ' + ${member.lastName}">
+								</option>
+							</select>
+						</div>
+
+						<div class="input-group col-md-2 col-sm-5 col-8 ">
+							<select id="example-getting-started" multiple="multiple" name="tags">
+								<option th:each="tag : ${tags}" th:value="${tag.id}"><span
+										class="badge m-1 text-white"
+										th:style="'background-color:'+${tag.color}"
+										th:text="${tag.name}"></span>
+								</option>
+							</select>
+						</div>
+
+						<div class="input-group col-md-2 col-sm-5 ">
+							<button class="btn btn-primary" type="submit">
+								<i class="fas fa-plus"></i> New task
+							</button>
+						</div>
 					</div>
-					<div class="input-group col-md-3 col-sm-5 ">
-						<input type="text" class="form-control" placeholder="Description"
-							name="description">
-					</div>
-					<div class="input-group col-md-3 col-sm-5 ">
-						<select class="custom-select" name="assignedTo">
-							<option selected
-								th:text="${loggedUser.firstName} + ' ' +${loggedUser.lastName} "></option>
-							<option th:each="member : ${members}"
-								th:text="${member.firstName} + ' ' + ${member.lastName}">
-							</option>
-						</select>
-					</div>
-					<div class="input-group col-md-3 col-sm-5 ">
-						<button class="btn btn-primary" type="submit">
-							<i class="fas fa-plus"></i> New task
-						</button>
-					</div>
-				</div>
-			</form>
+				</form>
 			</div>
 		</div>
 	</div>
 
 </body>
 <script>
+	$(document).ready(function() {
+		$('#example-getting-started').multiselect();
+	});
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip()
 	})
