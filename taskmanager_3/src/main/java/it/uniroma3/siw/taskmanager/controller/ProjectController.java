@@ -200,7 +200,9 @@ public class ProjectController {
 		Task task = this.taskService.getTask(id);
 		Project project = this.projectService.getProject(idP);
 		List<User> members = project.getMembers();
+		List<Tag> tags = project.getTags();
 		User loggedUser = sessionData.getLoggedUser();
+		model.addAttribute("tags",tags);
 		model.addAttribute("members",members);
 		model.addAttribute("project",project);
 		model.addAttribute("task",task);
@@ -218,6 +220,7 @@ public class ProjectController {
 			task.setName(taskForm.getName());
 			task.setDescription(taskForm.getDescription());
 			task.setAssignedTo(taskForm.getAssignedTo());
+			task.setTags(taskForm.getTags());
 			this.taskService.saveTask(task);
 			User loggedUser = sessionData.getLoggedUser();
 			model.addAttribute("user", loggedUser);
@@ -247,8 +250,15 @@ public class ProjectController {
 		
 		Tag tag= this.tagService.getTag(tagid);
 		
-		
+		List<Task> tasks = tag.getTasks();
+
+		for (Task task : tasks) {
+		     task.getTags().remove(tag);
+		}
 		this.tagService.deleteTag(tag);
+		
+		
+		
 		
 		return "redirect:/project/" + id;
 	}

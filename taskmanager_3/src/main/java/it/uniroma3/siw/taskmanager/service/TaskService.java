@@ -59,9 +59,5 @@ public class TaskService {
         this.taskRepository.delete(task);
     }
     
-    /*
-     * Delete tags
-     */
-    
     
 }

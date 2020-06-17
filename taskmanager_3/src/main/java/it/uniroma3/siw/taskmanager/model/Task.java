@@ -45,7 +45,7 @@ public class Task {
 	@Column(nullable = false)
 	private boolean completed;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "task_tags", joinColumns = { @JoinColumn(name = "task_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "tag_id") })
 	private List<Tag> tags; // Lista di tag del task

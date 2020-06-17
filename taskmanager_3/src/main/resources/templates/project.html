@@ -185,7 +185,7 @@
 						</div>
 
 						<div class="input-group col-md-2 col-sm-5 col-8 ">
-							<select id="example-getting-started" multiple="multiple" name="tags">
+							<select id="tagSelector" multiple="multiple" name="tags">
 								<option th:each="tag : ${tags}" th:value="${tag.id}"><span
 										class="badge m-1 text-white"
 										th:style="'background-color:'+${tag.color}"
@@ -208,7 +208,7 @@
 </body>
 <script>
 	$(document).ready(function() {
-		$('#example-getting-started').multiselect();
+		$('#tagSelector').multiselect();
 	});
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip()
