@@ -3,6 +3,7 @@ package it.uniroma3.siw.taskmanager.model;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,10 +44,10 @@ public class Tag {
 	public String color;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id", nullable = false)
+	@JoinColumn(name = "project_id", nullable = false)
 	private Project project;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY,mappedBy = "tags")
 	private List<Task> tasks;
 
 	public Tag() {
@@ -103,9 +104,11 @@ public class Tag {
 	public Project getProject() {
 		return project;
 	}
+
 	public void addProject(Project project) {
-		this.project=project;
+		this.project = project;
 	}
+
 	public void setProject(Project project) {
 		this.project = project;
 	}

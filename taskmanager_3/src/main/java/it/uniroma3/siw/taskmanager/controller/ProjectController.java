@@ -183,7 +183,8 @@ public class ProjectController {
 			BindingResult taskBindingResult) {
 
 		Project project = this.projectService.getProject(id);
-
+		
+		
 		if (!taskBindingResult.hasErrors()) {
 			task.setProject(project);
 			this.taskService.saveTask(task);
@@ -245,6 +246,7 @@ public class ProjectController {
 	public String deletaTag( @PathVariable Long id ,@PathVariable Long tagid) {
 		
 		Tag tag= this.tagService.getTag(tagid);
+		
 		
 		this.tagService.deleteTag(tag);
 		

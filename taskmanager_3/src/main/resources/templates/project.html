@@ -147,7 +147,7 @@
 						<td th:text="${task.name}"></td>
 						<td th:text="${task.description}" class="text-secondary"></td>
 						<td th:text="${task.assignedTo}" class="text-secondary"></td>
-						<td class="text-secondary"><span th:each="tag : ${tags}"
+						<td class="text-secondary"><span th:each="tag : ${task.tags}"
 							class="badge m-1 text-white bdg"
 							th:style="'background-color:'+${tag.color}" th:text="${tag.name}"></span></td>
 						<td th:if="${canEdit} == true "><a

@@ -6,174 +6,176 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A Task is a unitary activity managed by the TaskManager.
- * It is generated and owned by a specific User within the context of a specific Project.
- * The task is contained in the Project and is visible to whoever has visibility over its Project.
- * The Task can be marked as "completed".
+ * A Task is a unitary activity managed by the TaskManager. It is generated and
+ * owned by a specific User within the context of a specific Project. The task
+ * is contained in the Project and is visible to whoever has visibility over its
+ * Project. The Task can be marked as "completed".
  */
 @Entity
 public class Task {
 
-    /**
-     * Unique identifier for this Task
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+	/**
+	 * Unique identifier for this Task
+	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-    /**
-     * Name for this task
-     */
-    @Column(nullable = false, length = 100)
-    private String name;
-    /**
-     * Project for this task
-     */
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Project project;
-    /**
-     * Description for this task
-     */
-    @Column
-    private String description;
-    
-   
-    private String assignedTo;
-   
+	/**
+	 * Name for this task
+	 */
+	@Column(nullable = false, length = 100)
+	private String name;
+	/**
+	 * Project for this task
+	 */
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Project project;
+	/**
+	 * Description for this task
+	 */
+	@Column
+	private String description;
 
-    /**
-     * Boolean flag specifying whether this Task is completed or not
-     */
-    @Column(nullable = false)
-    private boolean completed;
-    
-    @ManyToMany(mappedBy = "tasks", fetch = FetchType.EAGER)
-    private List<Tag> tags;   //Lista di tag del task
+	private String assignedTo;
 
-    /**
-     * Timestamp for the instant this Task was created/loaded into the DB
-     */
-    @Column(updatable = false, nullable = false)
-    private LocalDateTime creationTimestamp;
+	/**
+	 * Boolean flag specifying whether this Task is completed or not
+	 */
+	@Column(nullable = false)
+	private boolean completed;
 
-    /**
-     * Timestamp for the last update of this Task into the DB
-     */
-    @Column(nullable = false)
-    private LocalDateTime lastUpdateTimestamp;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })
+	@JoinTable(name = "task_tags", joinColumns = { @JoinColumn(name = "task_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "tag_id") })
+	private List<Tag> tags; // Lista di tag del task
 
-    public Task() {}
+	/**
+	 * Timestamp for the instant this Task was created/loaded into the DB
+	 */
+	@Column(updatable = false, nullable = false)
+	private LocalDateTime creationTimestamp;
 
-    public Task(String name,
-                String description,
-                boolean completed) {
-        this.name = name;
-        this.description = description;
-        this.completed = completed;
-    }
+	/**
+	 * Timestamp for the last update of this Task into the DB
+	 */
+	@Column(nullable = false)
+	private LocalDateTime lastUpdateTimestamp;
 
-    /**
-     * This method initializes the creationTimestamp and lastUpdateTimestamp of this User to the current instant.
-     * This method is called automatically just before the User is persisted thanks to the @PrePersist annotation.
-     */
-    @PrePersist
-    protected void onPersist() {
-        this.creationTimestamp = LocalDateTime.now();
-        this.lastUpdateTimestamp = LocalDateTime.now();
-    }
+	public Task() {
+	}
 
-    /**
-     * This method updates the lastUpdateTimestamp of this User to the current instant.
-     * This method is called automatically just before the User is updated thanks to the @PreUpdate annotation.
-     */
-    @PreUpdate
-    protected void onUpdate() {
-        this.lastUpdateTimestamp = LocalDateTime.now();
-    }
+	public Task(String name, String description, boolean completed) {
+		this.name = name;
+		this.description = description;
+		this.completed = completed;
+	}
 
+	/**
+	 * This method initializes the creationTimestamp and lastUpdateTimestamp of this
+	 * User to the current instant. This method is called automatically just before
+	 * the User is persisted thanks to the @PrePersist annotation.
+	 */
+	@PrePersist
+	protected void onPersist() {
+		this.creationTimestamp = LocalDateTime.now();
+		this.lastUpdateTimestamp = LocalDateTime.now();
+	}
 
-    // GETTERS AND SETTERS
+	/**
+	 * This method updates the lastUpdateTimestamp of this User to the current
+	 * instant. This method is called automatically just before the User is updated
+	 * thanks to the @PreUpdate annotation.
+	 */
+	@PreUpdate
+	protected void onUpdate() {
+		this.lastUpdateTimestamp = LocalDateTime.now();
+	}
 
-    public Long getId() {
-        return id;
-    }
+	// GETTERS AND SETTERS
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
-    
+	public String getName() {
+		return name;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public boolean isCompleted() {
-        return completed;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-    public String getAssignedTo() {
-        return assignedTo;
-    }
+	public boolean isCompleted() {
+		return completed;
+	}
 
-    public void setAssignedTo(String username) {
-        this.assignedTo = username;
-    }
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
 
-    public LocalDateTime getCreationTimestamp() {
-        return creationTimestamp;
-    }
+	public String getAssignedTo() {
+		return assignedTo;
+	}
 
-    public void setCreationTimestamp(LocalDateTime creationTimestamp) {
-        this.creationTimestamp = creationTimestamp;
-    }
+	public void setAssignedTo(String username) {
+		this.assignedTo = username;
+	}
 
-    public LocalDateTime getLastUpdateTimestamp() {
-        return lastUpdateTimestamp;
-    }
+	public LocalDateTime getCreationTimestamp() {
+		return creationTimestamp;
+	}
 
-    public void setLastUpdateTimestamp(LocalDateTime lastUpdateTimestamp) {
-        this.lastUpdateTimestamp = lastUpdateTimestamp;
-    }
-    public List<Tag> getTags() {
-  		return tags;
-  	}
+	public void setCreationTimestamp(LocalDateTime creationTimestamp) {
+		this.creationTimestamp = creationTimestamp;
+	}
 
-  	public void setTags(List<Tag> tags) {
-  		this.tags = tags;
-  	}
+	public LocalDateTime getLastUpdateTimestamp() {
+		return lastUpdateTimestamp;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return completed == task.completed &&
-               Objects.equals(name, task.name) &&
-                Objects.equals(creationTimestamp, task.creationTimestamp) &&
-                Objects.equals(lastUpdateTimestamp, task.lastUpdateTimestamp);
-    }
+	public void setLastUpdateTimestamp(LocalDateTime lastUpdateTimestamp) {
+		this.lastUpdateTimestamp = lastUpdateTimestamp;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, completed, creationTimestamp, lastUpdateTimestamp);
-    }
+	public List<Tag> getTags() {
+		return tags;
+	}
 
-    public Project getProject() {
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Task task = (Task) o;
+		return completed == task.completed && Objects.equals(name, task.name)
+				&& Objects.equals(creationTimestamp, task.creationTimestamp)
+				&& Objects.equals(lastUpdateTimestamp, task.lastUpdateTimestamp);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, completed, creationTimestamp, lastUpdateTimestamp);
+	}
+
+	public Project getProject() {
 		return project;
 	}
 
