@@ -70,6 +70,6 @@ $ Solo l' utente proprietario del progetto può effettuare le sueguenti operazio
 - [x] Rimuovere un Tag da un task
 
 
-
+Realizzato da Eduard Ursu & Emilio Caschera
 
 
