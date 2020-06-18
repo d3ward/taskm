@@ -2,6 +2,7 @@ package it.uniroma3.siw.taskmanager.model;
 
 import javax.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +35,12 @@ public class Project {
 	private String description;
 
 	/**
+	 * The date that this Project was created/loaded into the DB
+	 */
+	@Column(updatable = false, nullable = false)
+	private LocalDate data;
+
+	/**
 	 * User owner for this Project
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -53,13 +60,10 @@ public class Project {
 	@JoinColumn(name = "project_id")
 	private List<Task> tasks;
 
-	
 	/**
 	 * Tags that this project contains
 	 */
-	@OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "project")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "project")
 	private List<Tag> tags;
 
 	public Project() {
@@ -130,6 +134,22 @@ public class Project {
 	public void addTag(Tag tag) {
 		this.tags.add(tag);
 	}
+
+	public LocalDate getdata() {
+		return data;
+	}
+
+	public void setdata(LocalDate data) {
+		this.data = data;
+	}
+	/**
+     * This method initializes the creationTimestamp and lastUpdateTimestamp of this User to the current instant.
+     * This method is called automatically just before the User is persisted thanks to the @PrePersist annotation.
+     */
+    @PrePersist
+    protected void onPersist() {
+        this.data = LocalDate.now();
+    }
 
 	public List<Task> getTasks() {
 		return tasks;

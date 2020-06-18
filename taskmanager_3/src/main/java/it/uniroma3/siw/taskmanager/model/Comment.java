@@ -1,17 +1,13 @@
 package it.uniroma3.siw.taskmanager.model;
 
-import javax.persistence.*;
-
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 
 @Entity
@@ -36,10 +32,8 @@ public class Comment {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private User owner;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional= false )
-	@JoinColumn(name="task_id",nullable=false)
-	@OnDelete(action=OnDeleteAction.CASCADE)
-	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
 	private Task task;
 	
 
@@ -59,6 +53,12 @@ public class Comment {
 		return id;
 	}
 
+	public void setTask(Task task) {
+		this.task=task;
+	}
+	public Task getTask() {
+		return this.task;
+	}
 	public void setId(Long id) {
 		this.id = id;
 	}

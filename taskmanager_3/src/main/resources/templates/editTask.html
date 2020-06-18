@@ -36,9 +36,9 @@
 				<select class="custom-select mb-3" name="assignedTo">
 					<option
 						th:text="${loggedUser.firstName} + ' ' + ${loggedUser.lastName}"
-						th:selected="${task.assignedTo.contains(loggedUser.lastName)}"></option>
+						th:selected="${task.assignedTo.lastName.contains(loggedUser.lastName)}"></option>
 					<option th:each="member : ${members} "
-						th:selected="${task.assignedTo.contains(member.lastName)}"
+						th:selected="${task.assignedTo.lastName.contains(member.lastName)}"
 						th:text="${member.firstName} + ' ' + ${member.lastName}">
 					</option>
 				</select>

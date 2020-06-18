@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import it.uniroma3.siw.taskmanager.controller.session.SessionData;
 import it.uniroma3.siw.taskmanager.controller.validation.ProjectValidator;
 import it.uniroma3.siw.taskmanager.controller.validation.TaskValidator;
+import it.uniroma3.siw.taskmanager.model.Comment;
 import it.uniroma3.siw.taskmanager.model.Credentials;
 import it.uniroma3.siw.taskmanager.model.Project;
 import it.uniroma3.siw.taskmanager.model.Tag;
 import it.uniroma3.siw.taskmanager.model.Task;
 import it.uniroma3.siw.taskmanager.model.User;
+import it.uniroma3.siw.taskmanager.service.CommentService;
 import it.uniroma3.siw.taskmanager.service.CredentialsService;
 import it.uniroma3.siw.taskmanager.service.ProjectService;
 import it.uniroma3.siw.taskmanager.service.TagService;
@@ -33,10 +35,11 @@ public class ProjectController {
 
 	@Autowired
 	ProjectService projectService;
-	
+
 	@Autowired
 	TagService tagService;
-
+	@Autowired
+	CommentService commentService;
 	@Autowired
 	TaskService taskService;
 	@Autowired
@@ -79,7 +82,8 @@ public class ProjectController {
 		if (!project.getOwner().equals(loggedUser) && !members.contains(loggedUser))
 			return "redirect:/projects";
 
-		model.addAttribute("tags",tags);
+		model.addAttribute("shareForm", new Credentials());
+		model.addAttribute("tags", tags);
 		model.addAttribute("loggedUser", loggedUser);
 		model.addAttribute("canEdit", user.getId() == loggedUser.getId());
 		model.addAttribute("owner", user.getFirstName() + " " + user.getLastName());
@@ -117,16 +121,17 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = { "/project/{id}/share" }, method = RequestMethod.POST)
-	public String shareProject(@RequestParam("username") String username, @PathVariable Long id) {
+	public String shareProject(@Valid @ModelAttribute("shareForm") Credentials cred, @PathVariable Long id,
+			BindingResult credentialsBindingResult) {
 		Project project = projectService.getProject(id);
-		Credentials credentials = this.credentialsService.getCredentials(username);
+		Credentials credentials = this.credentialsService.getCredentials(cred.getUserName());
 
-		if (credentials != null) {
+		if (credentials != null)
 			this.projectService.shareProjectWithUser(project, credentials.getUser());
-
-			return "redirect:/project/" + id;
-		}
-		return "redirect:/home";
+		else
+			credentialsBindingResult.rejectValue("userName", "notExist");
+	
+		return "redirect:/project/" + id;
 	}
 
 	@RequestMapping(value = { "/project/{id}/delete" }, method = RequestMethod.GET)
@@ -179,12 +184,12 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = { "/project/{id}/task" }, method = RequestMethod.POST)
-	public String newTask(@Valid @ModelAttribute("taskForm") Task task,@RequestParam("assignId") Long assignId, @PathVariable Long id,
-			BindingResult taskBindingResult) {
+	public String newTask(@Valid @ModelAttribute("taskForm") Task task, @RequestParam("assignId") Long assignId,
+			@PathVariable Long id, BindingResult taskBindingResult) {
 
 		Project project = this.projectService.getProject(id);
 		task.setAssignedTo(this.userService.getUser(assignId));
-		
+
 		if (!taskBindingResult.hasErrors()) {
 			task.setProject(project);
 			this.taskService.saveTask(task);
@@ -193,8 +198,7 @@ public class ProjectController {
 		}
 		return "redirect:/projects";
 	}
-	
-	
+
 	@RequestMapping(value = { "/project/{idP}/editTask/{id}" }, method = RequestMethod.GET)
 	public String updateTask(Model model, @PathVariable Long id, @PathVariable Long idP) {
 		Task task = this.taskService.getTask(id);
@@ -202,21 +206,21 @@ public class ProjectController {
 		List<User> members = project.getMembers();
 		List<Tag> tags = project.getTags();
 		User loggedUser = sessionData.getLoggedUser();
-		model.addAttribute("tags",tags);
-		model.addAttribute("members",members);
-		model.addAttribute("project",project);
-		model.addAttribute("task",task);
-		model.addAttribute("loggedUser",loggedUser);
+		model.addAttribute("tags", tags);
+		model.addAttribute("members", members);
+		model.addAttribute("project", project);
+		model.addAttribute("task", task);
+		model.addAttribute("loggedUser", loggedUser);
 		return "editTask";
 	}
-	
+
 	@RequestMapping(value = { "/project/{idP}/taskEdit/{id}" }, method = RequestMethod.POST)
-	public String editTask(@Valid @ModelAttribute("task") Task taskForm,
-			BindingResult taskBindingResult, Model model, @PathVariable Long id,@PathVariable Long idP) {
+	public String editTask(@Valid @ModelAttribute("task") Task taskForm, BindingResult taskBindingResult, Model model,
+			@PathVariable Long id, @PathVariable Long idP) {
 		// validate project fields
 		this.taskValidator.validate(taskForm, taskBindingResult);
 		if (!taskBindingResult.hasErrors()) {
-			Task task= taskService.getTask(id);
+			Task task = taskService.getTask(id);
 			task.setName(taskForm.getName());
 			task.setDescription(taskForm.getDescription());
 			task.setAssignedTo(taskForm.getAssignedTo());
@@ -229,54 +233,59 @@ public class ProjectController {
 
 		return "updateProject";
 	}
-	
-	
+
 	@RequestMapping(value = { "/project/{id}/addTag" }, method = RequestMethod.POST)
 	public String tagProject(@Valid @ModelAttribute("tagForm") Tag tagForm, @PathVariable Long id) {
-		
+
 		Project project = projectService.getProject(id);
-		
-		Tag tag= this.tagService.retrieveTagByName(tagForm.getName());
-		if(tag!=null) tagForm=tag;
-		
+
+		Tag tag = this.tagService.retrieveTagByName(tagForm.getName());
+		if (tag != null)
+			tagForm = tag;
+
 		tagForm.addProject(project);
 		project.addTag(tagForm);
 		this.projectService.saveProject(project);
 		return "redirect:/project/" + id;
 	}
-	
+
 	@RequestMapping(value = { "/project/{id}/deleteTag/{tagid}" }, method = RequestMethod.GET)
-	public String deletaTag( @PathVariable Long id ,@PathVariable Long tagid) {
-		
-		Tag tag= this.tagService.getTag(tagid);
-		
+	public String deletaTag(@PathVariable Long id, @PathVariable Long tagid) {
+
+		Tag tag = this.tagService.getTag(tagid);
+
 		List<Task> tasks = tag.getTasks();
 
 		for (Task task : tasks) {
-		     task.getTags().remove(tag);
+			task.getTags().remove(tag);
 		}
 		this.tagService.deleteTag(tag);
-		
-		
-		
-		
+
 		return "redirect:/project/" + id;
 	}
-	
-	
-	
-	
+
+	@RequestMapping(value = { "/project/{pId}/comment/{taskid}" }, method = RequestMethod.POST)
+	public String commentTask(@PathVariable Long taskid, @PathVariable Long pId,
+			@RequestParam("content") String content) {
+		Comment comment = new Comment();
+		Task task = this.taskService.getTask(taskid);
+		comment.setName(content);
+		comment.setTask(task);
+		comment.setOwner(sessionData.getLoggedUser());
+		task.addComment(comment);
+		this.taskService.saveTask(task);
+		return "redirect:/project/" + pId;
+	}
+
 	@RequestMapping(value = { "/project/{id}/taskTag" }, method = RequestMethod.POST)
 	public String tagTask(@Valid @ModelAttribute("tagForm") Tag tagForm, @PathVariable Long id) {
-		
+
 		Project project = projectService.getProject(id);
-		
+
 		tagForm.addProject(project);
 		project.addTag(tagForm);
 		this.projectService.saveProject(project);
 		return "redirect:/project/" + id;
 	}
-
-	
 
 }

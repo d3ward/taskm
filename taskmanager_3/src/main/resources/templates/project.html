@@ -32,6 +32,36 @@
 </style>
 <body>
 
+
+
+	<div class="modal fade" id="commentModal" tabindex="-1" role="dialog"
+		aria-labelledby="modalCommentLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="formComment" name="formComment" action="" method="POST">
+					<div class="modal-body">
+						<textarea class="form-control" placeholder="Comment.."
+							name="content"></textarea>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">
+							<i class="far fa-comment"></i> Comment
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
 	<div class="container mt-4">
 		<navbar th:replace="fragments/base.html :: navbar"></navbar>
 		<div class="jumbotron text-center mt-4">
@@ -40,7 +70,6 @@
 			<h4 th:text="${owner}" th:if="${canEdit} == false "></h4>
 			<h4 th:if="${canEdit} ==  true ">Tu sei il proprietario di
 				questo progetto</h4>
-
 			<div>
 				<a th:if="${canEdit} == true "
 					th:href="@{'/project/' + ${project.id} + '/delete'}"
@@ -107,12 +136,14 @@
 
 				</ul>
 			</div>
-			<form th:if="${canEdit} == true "
-				th:action="@{'/project/'+ ${project.id} + '/share'}" method="POST">
+			<form th:if="${canEdit} == true " name="shareForm"
+				th:action="@{'/project/'+ ${project.id} + '/share'}" method="POST" th:object="${shareForm}">
 				<hr>
 				<div class="input-group">
 					<input type="text" class="form-control" placeholder="Username"
 						name="username">
+					<div id="error1" th:if="${#fields.hasErrors('userName')}"
+						class="alert bg-danger text-white mt-2" th:errors="*{userName}"></div>
 					<div class="input-group-append">
 						<button class="btn btn-primary" type="submit">
 							<i class="far fa-share-square"></i>
@@ -135,7 +166,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="task : ${project.tasks}">
+					<div th:each="task : ${project.tasks}">
+					<tr>
 						<th><a th:if="${task.completed} == false "
 							th:href="'/project/'+ ${project.id}+'/completeTask/' + ${task.id}"
 							class="btn text-primary p-0" type="submit"><i
@@ -146,7 +178,9 @@
 								class="far fa-check-square" style="font-size: 30px;"></i></a></th>
 						<td th:text="${task.name}"></td>
 						<td th:text="${task.description}" class="text-secondary"></td>
-						<td th:text="${task.assignedTo.firstName} + ${task.assignedTo.lastName}" class="text-secondary"></td>
+						<td
+							th:text="${task.assignedTo.firstName} +' '+ ${task.assignedTo.lastName}"
+							class="text-secondary"></td>
 						<td class="text-secondary"><span th:each="tag : ${task.tags}"
 							class="badge m-1 text-white bdg"
 							th:style="'background-color:'+${tag.color}" th:text="${tag.name}"></span></td>
@@ -156,8 +190,31 @@
 								class="far fa-edit"></i></a> <a
 							th:href="'/project/'+ ${project.id}+'/deleteTask/' + ${task.id}"
 							class="btn bg-danger text-white" type="submit"><i
-								class="far fa-trash-alt"></i></a></td>
+								class="far fa-trash-alt"></i></a>
+							<button type="button" class="btn btn-primary"
+								th:onclick="'commentM('+${task.id}+','+${project.id}+')'">
+								<i class="far fa-comment"></i>
+							</button></td>
 					</tr>
+					<tr>
+						<td colspan="6" class="text-center"><a
+							class="btn btn-primary mb-2" data-toggle="collapse"
+							th:href="'#collapse' + ${task.id}" role="button"
+							aria-expanded="false" aria-controls="collapseExample"
+							th:text="'Comments ( '+ ${task.comments.size()}+' )'"> </a>
+							<div class="collapse" th:id="'collapse'+${task.id}">
+								<div class="card card-body text-left">
+									<div th:each="comment : ${task.comments}">
+
+										<h4 class="text-primary"
+											th:text="${comment.owner.firstName} +' '+${comment.owner.firstName}"></h4>
+										<div th:text="${comment.content}"></div>
+										<hr>
+									</div>
+								</div>
+							</div></td>
+					</tr>
+					</div>
 				</tbody>
 			</table>
 
@@ -178,7 +235,7 @@
 							<select class="custom-select" name="assignId">
 								<option selected th:value="${loggedUser.id}"
 									th:text="${loggedUser.firstName} + ' ' +${loggedUser.lastName} "></option>
-								<option  th:each="member : ${members} " th:value="${member.id}"
+								<option th:each="member : ${members} " th:value="${member.id}"
 									th:text="${member.firstName} + ' ' + ${member.lastName}">
 								</option>
 							</select>
@@ -207,7 +264,15 @@
 
 </body>
 <script>
+	function commentM(taskId, projectId) {
+		$("#formComment").attr('action',
+				'/project/' + projectId + '/comment/' + taskId);
+		$("#commentModal").modal('show');
+
+	}
+
 	$(document).ready(function() {
+
 		$('#tagSelector').multiselect();
 	});
 	$(function() {

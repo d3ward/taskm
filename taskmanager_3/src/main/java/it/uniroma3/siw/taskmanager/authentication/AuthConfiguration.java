@@ -39,7 +39,8 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/", "/index", "/login", "/users/register").permitAll()
+		http.cors().and().csrf().disable()
+		.authorizeRequests().antMatchers(HttpMethod.GET, "/", "/index", "/login", "/users/register").permitAll()
 				.antMatchers(HttpMethod.POST, "/login", "/users/register").permitAll()
 				.antMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
 				.antMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE).anyRequest().authenticated()

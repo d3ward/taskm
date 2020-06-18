@@ -40,8 +40,6 @@ public class Task {
 	@ManyToOne
 	private User assignedTo;
 	
-	
-
 	/**
 	 * Boolean flag specifying whether this Task is completed or not
 	 */
@@ -53,6 +51,11 @@ public class Task {
 			@JoinColumn(name = "tag_id") })
 	private List<Tag> tags; // Lista di tag del task
 
+	@OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "task")
+	private List<Comment> comments;
+	
 	/**
 	 * Timestamp for the instant this Task was created/loaded into the DB
 	 */
@@ -111,6 +114,15 @@ public class Task {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	public List<Comment> getComments() {
+		return comments;
+	}
+	public void addComment(Comment comment) {
+	this.comments.add(comment);}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 
 	public String getDescription() {
