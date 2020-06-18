@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.uniroma3.siw.taskmanager.controller.session.SessionData;
 import it.uniroma3.siw.taskmanager.controller.validation.ProjectValidator;
@@ -81,8 +82,12 @@ public class ProjectController {
 		List<Tag> tags = project.getTags();
 		if (!project.getOwner().equals(loggedUser) && !members.contains(loggedUser))
 			return "redirect:/projects";
-
-		model.addAttribute("shareForm", new Credentials());
+		if (!model.containsAttribute("shareForm"))
+			model.addAttribute("shareForm", new Credentials());
+		if (!model.containsAttribute("tagForm"))
+			model.addAttribute("tagForm", new Tag());
+		if (!model.containsAttribute("taskForm"))
+			model.addAttribute("taskForm", new Task());
 		model.addAttribute("tags", tags);
 		model.addAttribute("loggedUser", loggedUser);
 		model.addAttribute("canEdit", user.getId() == loggedUser.getId());
@@ -121,17 +126,21 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = { "/project/{id}/share" }, method = RequestMethod.POST)
-	public String shareProject(@Valid @ModelAttribute("shareForm") Credentials cred, @PathVariable Long id,
-			BindingResult credentialsBindingResult) {
+	public String shareProject(@Valid @ModelAttribute("shareForm") Credentials shareForm, @PathVariable Long id,
+			BindingResult credentialsBindingResult, Model model, RedirectAttributes redirectAttributes) {
 		Project project = projectService.getProject(id);
-		Credentials credentials = this.credentialsService.getCredentials(cred.getUserName());
+		Credentials credentials = this.credentialsService.getCredentials(shareForm.getUserName());
 
-		if (credentials != null)
+		if (credentials != null) {
 			this.projectService.shareProjectWithUser(project, credentials.getUser());
-		else
+		} else {
 			credentialsBindingResult.rejectValue("userName", "notExist");
-	
+			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.shareForm",
+					credentialsBindingResult);
+			redirectAttributes.addFlashAttribute("shareForm", shareForm);
+		}
 		return "redirect:/project/" + id;
+
 	}
 
 	@RequestMapping(value = { "/project/{id}/delete" }, method = RequestMethod.GET)
@@ -184,19 +193,22 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = { "/project/{id}/task" }, method = RequestMethod.POST)
-	public String newTask(@Valid @ModelAttribute("taskForm") Task task, @RequestParam("assignId") Long assignId,
-			@PathVariable Long id, BindingResult taskBindingResult) {
+	public String newTask(@Valid @ModelAttribute("taskForm") Task taskForm, @RequestParam("assignId") Long assignId,
+			@PathVariable Long id, RedirectAttributes redirectAttributes, BindingResult taskBindingResult) {
 
 		Project project = this.projectService.getProject(id);
-		task.setAssignedTo(this.userService.getUser(assignId));
+		taskForm.setAssignedTo(this.userService.getUser(assignId));
 
+		this.taskValidator.validate(taskForm, taskBindingResult);
 		if (!taskBindingResult.hasErrors()) {
-			task.setProject(project);
-			this.taskService.saveTask(task);
+			taskForm.setProject(project);
+			this.taskService.saveTask(taskForm);
 			return "redirect:/project/" + id;
-
 		}
-		return "redirect:/projects";
+		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.taskForm",
+				taskBindingResult);
+		redirectAttributes.addFlashAttribute("taskForm", taskForm);
+		return "redirect:/project/" + id;
 	}
 
 	@RequestMapping(value = { "/project/{idP}/editTask/{id}" }, method = RequestMethod.GET)
@@ -235,9 +247,19 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = { "/project/{id}/addTag" }, method = RequestMethod.POST)
-	public String tagProject(@Valid @ModelAttribute("tagForm") Tag tagForm, @PathVariable Long id) {
+	public String tagProject(@Valid @ModelAttribute("tagForm") Tag tagForm, @PathVariable Long id,
+			RedirectAttributes redirectAttributes, BindingResult tagBindingResult) {
 
 		Project project = projectService.getProject(id);
+
+		if (tagForm.getName() == null) {
+			tagBindingResult.rejectValue("name", "required");
+
+			redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.tagForm",
+					tagBindingResult);
+			redirectAttributes.addFlashAttribute("tagForm", tagForm);
+			return "redirect:/project/" + id;
+		}
 
 		Tag tag = this.tagService.retrieveTagByName(tagForm.getName());
 		if (tag != null)

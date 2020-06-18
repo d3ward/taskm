@@ -100,12 +100,20 @@
 
 			<form th:if="${canEdit} == true "
 				th:action="@{'/project/'+ ${project.id} + '/addTag'}" method="POST"
-				name="tagForm" class="col-12">
+				name="tagForm" class="col-12" th:object="${tagForm}">
 				<hr>
 				<div class="row">
 					<div class="input-group col-md-4 col-sm-5 m-1">
+						<div id="error2" th:if="${#fields.hasErrors('name')}"
+							class="alert bg-danger text-white mt-2" th:errors="*{name}"></div>
+					</div>
+				</div>
+				<div class="row">
+
+					<div class="input-group col-md-4 col-sm-5 m-1">
+
 						<input type="text" class="form-control" placeholder="Name"
-							name="name">
+							name="name" oninput="clearError(2)">
 					</div>
 
 					<div class="input-group col-md-4 col-sm-5 m-1 ">
@@ -137,18 +145,21 @@
 				</ul>
 			</div>
 			<form th:if="${canEdit} == true " name="shareForm"
-				th:action="@{'/project/'+ ${project.id} + '/share'}" method="POST" th:object="${shareForm}">
+				th:action="@{'/project/'+ ${project.id} + '/share'}" method="POST"
+				th:object="${shareForm}">
 				<hr>
+				<div id="error1" th:if="${#fields.hasErrors('userName')}"
+					class="alert bg-danger text-white mt-2" th:errors="*{userName}"></div>
 				<div class="input-group">
 					<input type="text" class="form-control" placeholder="Username"
-						name="username">
-					<div id="error1" th:if="${#fields.hasErrors('userName')}"
-						class="alert bg-danger text-white mt-2" th:errors="*{userName}"></div>
+						name="username" oninput="clearError(1)">
+
 					<div class="input-group-append">
 						<button class="btn btn-primary" type="submit">
 							<i class="far fa-share-square"></i>
 						</button>
 					</div>
+
 				</div>
 			</form>
 		</div>
@@ -220,12 +231,20 @@
 
 			<div class="col-12">
 				<form name="taskForm" th:if="${canEdit} == true "
-					th:action="@{'/project/'+ ${project.id} + '/task'}" method="POST">
+					th:action="@{'/project/'+ ${project.id} + '/task'}" method="POST"
+					th:object="${taskForm}">
 					<hr>
+					<div class="row">
+						<div class="input-group col-md-4 col-sm-5 m-1">
+							<div id="error4" th:if="${#fields.hasErrors('name')}"
+								class="alert bg-danger text-white mt-2" th:errors="*{name}"></div>
+						</div>
+						
+					</div>
 					<div class="row">
 						<div class="input-group col-md-2 col-sm-5">
 							<input type="text" class="form-control" placeholder="Name"
-								name="name">
+								name="name" oninput="clearError(4)">
 						</div>
 						<div class="input-group col-md-3 col-sm-5 ">
 							<input type="text" class="form-control" placeholder="Description"
@@ -264,6 +283,11 @@
 
 </body>
 <script>
+	function clearError(t) {
+		var errorMessage = document.getElementById("error" + t);
+		if (errorMessage)
+			errorMessage.parentElement.removeChild(errorMessage);
+	}
 	function commentM(taskId, projectId) {
 		$("#formComment").attr('action',
 				'/project/' + projectId + '/comment/' + taskId);
