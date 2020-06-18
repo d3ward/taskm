@@ -64,7 +64,7 @@ public class SessionData {
     private void update() {
         UserDetails loggedUserDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         this.credentials = this.credentialsRepository.findByUserName(loggedUserDetails.getUsername()).get(); // can never be absent
-        this.credentials.setPassword("[PROTECTED]");
+        //this.credentials.setPassword("[PROTECTED]");
         this.user = this.credentials.getUser();
     }
 }
