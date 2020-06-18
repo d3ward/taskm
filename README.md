@@ -12,7 +12,7 @@ Progetto SIW 2020 - Task Manager
 
 * Un Progetto ha un nome, una data di inizio e si compone di uno o più Task 
 * Ogni Progetto ha un proprietario e può essere condiviso da uno o più utenti
-$ Ogni utente ha uno username e una password, un nome, un cognome, una data di creazione:
+* Ogni utente ha uno username e una password, un nome, un cognome, una data di creazione:
   + può essere proprietario di uno o più progetti e può avere visibilità su uno o più progetti (di cui non è proprietario)
   + si autentica sul sistema con un username (univoco) e password
   + può creare progetti
