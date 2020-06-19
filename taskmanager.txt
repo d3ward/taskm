@@ -1,0 +1,373 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.2
+-- Dumped by pg_dump version 12.2
+
+-- Started on 2020-06-19 12:27:09
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 203 (class 1259 OID 65684)
+-- Name: comment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.comment (
+    id bigint NOT NULL,
+    content character varying(255),
+    owner_id bigint,
+    post_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.comment OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 65689)
+-- Name: credentials; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.credentials (
+    id bigint NOT NULL,
+    creation_timestamp timestamp without time zone NOT NULL,
+    last_update_timestamp timestamp without time zone NOT NULL,
+    password character varying(100) NOT NULL,
+    role character varying(10) NOT NULL,
+    user_name character varying(100) NOT NULL,
+    user_id bigint
+);
+
+
+ALTER TABLE public.credentials OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 65682)
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hibernate_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 65694)
+-- Name: project; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.project (
+    id bigint NOT NULL,
+    data date NOT NULL,
+    description character varying(255),
+    name character varying(100) NOT NULL,
+    owner_id bigint
+);
+
+
+ALTER TABLE public.project OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 65699)
+-- Name: project_members; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.project_members (
+    visible_projects_id bigint NOT NULL,
+    members_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.project_members OWNER TO postgres;
+
+--
+-- TOC entry 207 (class 1259 OID 65702)
+-- Name: tag; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tag (
+    id bigint NOT NULL,
+    color character varying(255),
+    description character varying(255),
+    name character varying(100) NOT NULL,
+    project_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.tag OWNER TO postgres;
+
+--
+-- TOC entry 208 (class 1259 OID 65710)
+-- Name: task; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.task (
+    id bigint NOT NULL,
+    completed boolean NOT NULL,
+    creation_timestamp timestamp without time zone NOT NULL,
+    description character varying(255),
+    last_update_timestamp timestamp without time zone NOT NULL,
+    name character varying(100) NOT NULL,
+    assigned_to_id bigint,
+    project_id bigint
+);
+
+
+ALTER TABLE public.task OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 65715)
+-- Name: task_tags; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.task_tags (
+    task_id bigint NOT NULL,
+    tag_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.task_tags OWNER TO postgres;
+
+--
+-- TOC entry 210 (class 1259 OID 65718)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    id bigint NOT NULL,
+    creation_timestamp timestamp without time zone NOT NULL,
+    first_name character varying(100) NOT NULL,
+    last_name character varying(100) NOT NULL,
+    last_update_timestamp timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 65723)
+-- Name: users_task; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users_task (
+    user_id bigint NOT NULL,
+    task_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.users_task OWNER TO postgres;
+
+--
+-- TOC entry 2721 (class 2606 OID 65688)
+-- Name: comment comment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comment
+    ADD CONSTRAINT comment_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2723 (class 2606 OID 65693)
+-- Name: credentials credentials_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.credentials
+    ADD CONSTRAINT credentials_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2727 (class 2606 OID 65698)
+-- Name: project project_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.project
+    ADD CONSTRAINT project_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2729 (class 2606 OID 65709)
+-- Name: tag tag_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tag
+    ADD CONSTRAINT tag_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2731 (class 2606 OID 65714)
+-- Name: task task_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.task
+    ADD CONSTRAINT task_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2725 (class 2606 OID 65727)
+-- Name: credentials uk_iruybducdoxd2f0vh3t8g6x5y; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.credentials
+    ADD CONSTRAINT uk_iruybducdoxd2f0vh3t8g6x5y UNIQUE (user_name);
+
+
+--
+-- TOC entry 2735 (class 2606 OID 65729)
+-- Name: users_task uk_m72wopuxcc3sa4b0ho9kl3sqn; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users_task
+    ADD CONSTRAINT uk_m72wopuxcc3sa4b0ho9kl3sqn UNIQUE (task_id);
+
+
+--
+-- TOC entry 2733 (class 2606 OID 65722)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2743 (class 2606 OID 65765)
+-- Name: task fk3cjmgekj641ph0muq32huj8ux; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.task
+    ADD CONSTRAINT fk3cjmgekj641ph0muq32huj8ux FOREIGN KEY (assigned_to_id) REFERENCES public.users(id);
+
+
+--
+-- TOC entry 2746 (class 2606 OID 65780)
+-- Name: task_tags fk5jrufop0gtxfeybb27jkoqn9r; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.task_tags
+    ADD CONSTRAINT fk5jrufop0gtxfeybb27jkoqn9r FOREIGN KEY (task_id) REFERENCES public.task(id);
+
+
+--
+-- TOC entry 2740 (class 2606 OID 65750)
+-- Name: project_members fk6qakef2mfjhaoaqep3b9qneea; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.project_members
+    ADD CONSTRAINT fk6qakef2mfjhaoaqep3b9qneea FOREIGN KEY (members_id) REFERENCES public.users(id);
+
+
+--
+-- TOC entry 2739 (class 2606 OID 65745)
+-- Name: project fk7tetln4r9qig7tp05lsdqe8xo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.project
+    ADD CONSTRAINT fk7tetln4r9qig7tp05lsdqe8xo FOREIGN KEY (owner_id) REFERENCES public.users(id);
+
+
+--
+-- TOC entry 2737 (class 2606 OID 65735)
+-- Name: comment fk8jnqcs3773mtxy96ff7ws4171; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comment
+    ADD CONSTRAINT fk8jnqcs3773mtxy96ff7ws4171 FOREIGN KEY (post_id) REFERENCES public.task(id);
+
+
+--
+-- TOC entry 2742 (class 2606 OID 65760)
+-- Name: tag fkbyy56vice9njgl86752up8120; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tag
+    ADD CONSTRAINT fkbyy56vice9njgl86752up8120 FOREIGN KEY (project_id) REFERENCES public.project(id);
+
+
+--
+-- TOC entry 2738 (class 2606 OID 65740)
+-- Name: credentials fkcbcgksvnqvqxrrc4dwv3qys65; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.credentials
+    ADD CONSTRAINT fkcbcgksvnqvqxrrc4dwv3qys65 FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- TOC entry 2736 (class 2606 OID 65730)
+-- Name: comment fkcjptd4mjai64kvah9b6cbquer; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.comment
+    ADD CONSTRAINT fkcjptd4mjai64kvah9b6cbquer FOREIGN KEY (owner_id) REFERENCES public.users(id);
+
+
+--
+-- TOC entry 2745 (class 2606 OID 65775)
+-- Name: task_tags fkd15mt5ws4x5odinqe02xf8you; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.task_tags
+    ADD CONSTRAINT fkd15mt5ws4x5odinqe02xf8you FOREIGN KEY (tag_id) REFERENCES public.tag(id);
+
+
+--
+-- TOC entry 2748 (class 2606 OID 65790)
+-- Name: users_task fkgh1ue7q87k3oeeqa8kj2hauvu; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users_task
+    ADD CONSTRAINT fkgh1ue7q87k3oeeqa8kj2hauvu FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- TOC entry 2744 (class 2606 OID 65770)
+-- Name: task fkk8qrwowg31kx7hp93sru1pdqa; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.task
+    ADD CONSTRAINT fkk8qrwowg31kx7hp93sru1pdqa FOREIGN KEY (project_id) REFERENCES public.project(id);
+
+
+--
+-- TOC entry 2741 (class 2606 OID 65755)
+-- Name: project_members fkkkowdb1552cnnmu8apvugooo0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.project_members
+    ADD CONSTRAINT fkkkowdb1552cnnmu8apvugooo0 FOREIGN KEY (visible_projects_id) REFERENCES public.project(id);
+
+
+--
+-- TOC entry 2747 (class 2606 OID 65785)
+-- Name: users_task fkt52hbwf1wddrdy2lr9fi14fap; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users_task
+    ADD CONSTRAINT fkt52hbwf1wddrdy2lr9fi14fap FOREIGN KEY (task_id) REFERENCES public.task(id);
+
+
+-- Completed on 2020-06-19 12:27:09
+
+--
+-- PostgreSQL database dump complete
+--
+
