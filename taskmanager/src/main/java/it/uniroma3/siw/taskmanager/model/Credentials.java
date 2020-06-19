@@ -36,8 +36,7 @@ public class Credentials {
     /**
      * The List of Projects owned by this User
      */
-    @OneToOne(cascade = CascadeType.ALL)        // when the account is created...
-                                                    //when the account is removed
+    @OneToOne(cascade = CascadeType.ALL) 
     private User user;
 
     /**

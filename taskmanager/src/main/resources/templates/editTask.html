@@ -22,7 +22,7 @@
 		<form 
 			th:action="@{'/project/'+${project.id}+'/taskEdit/'+ ${task.id}}"
 			method="POST" class="shadow p-3 m-2 mx-auto rounded"
-			autocomplete="off" th:object="${taskForm}">
+			autocomplete="off" th:object="${taskForm}" name="taskForm">
 			
 			<div class="form-group ">
 				<label for="taskName">Name</label> <input class="form-control"

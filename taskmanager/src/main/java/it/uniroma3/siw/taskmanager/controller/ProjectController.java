@@ -218,7 +218,7 @@ public class ProjectController {
 		List<User> members = project.getMembers();
 		List<Tag> tags = project.getTags();
 		User loggedUser = sessionData.getLoggedUser();
-		model.addAttribute("taskForm",new Task());
+		model.addAttribute("taskForm",task);
 		model.addAttribute("tags", tags);
 		model.addAttribute("members", members);
 		model.addAttribute("project", project);
@@ -228,19 +228,21 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = { "/project/{idP}/taskEdit/{id}" }, method = RequestMethod.POST)
-	public String editTask(@Valid @ModelAttribute("taskForm") Task taskForm, BindingResult taskBindingResult, Model model,
-			@PathVariable Long id, @PathVariable Long idP) {
-		// validate project fields
-		//this.taskValidator.validate(taskForm, taskBindingResult);
-		//if (!taskBindingResult.hasErrors()) {
+	public String editTask(@Valid @ModelAttribute("taskForm") Task taskForm, BindingResult taskBindingResult,
+			Model model,  @PathVariable Long idP,@PathVariable Long id, @RequestParam("assignId") Long assignId) {
+		taskForm.setAssignedTo(this.userService.getUser(assignId));
+		// validate  task fields
+		/*System.out.println("\n\n\n\n\n" + taskForm.getName() + "\n\n\n");
+		this.taskValidator.validate(taskForm, taskBindingResult);
+		if (!taskBindingResult.hasErrors()) {*/
 			Task taskm = taskService.getTask(id);
 			taskm.setName(taskForm.getName());
 			taskm.setDescription(taskForm.getDescription());
 			taskm.setTags(taskForm.getTags());
 			this.taskService.saveTask(taskm);
-			return "redirect:/project/" + idP;
+			return "redirect:/project/ " + idP;
 		//}
-		//return "editTask";
+		//return "redirect:/project/"+idP+"/editTask/"+id;
 	}
 
 	@RequestMapping(value = { "/project/{id}/addTag" }, method = RequestMethod.POST)
